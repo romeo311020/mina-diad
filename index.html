@@ -3,582 +3,1633 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الإبداع في الرياضيات | أ. مينا دياب</title>
-    <!-- خط Cairo المميز من جوجل -->
+    <title>منصة مستر رياضيات التعليمية</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <!-- مكتبة الأيقونات FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* ==========================================
+           1. المتغيرات والتنسيقات العامة (CSS Variables)
+           ========================================== */
         :root {
-            --primary: #00f2fe;
-            --secondary: #4facfe;
-            --accent: #ff007f;
-            --bg-dark: #0b0f19;
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --whatsapp-color: #25d366;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --panel-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.03);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.5);
+            --accent: #818cf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #34d399;
+            --font-family: 'Cairo', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Cairo', sans-serif;
+            font-family: var(--font-family);
             scroll-behavior: smooth;
         }
 
         body {
-            background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
-            color: #f8fafc;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
             overflow-x: hidden;
         }
 
-        .bg-glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            filter: blur(150px);
-            opacity: 0.15;
-            z-index: 0;
-            top: 10%;
-            right: 10%;
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+            border: 2px solid #0f172a;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
         }
 
-        .main-card {
-            position: relative;
-            z-index: 1;
+        /* التأثير الزجاجي العام */
+        .glass-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 16px;
+        }
+
+        /* ==========================================
+           2. شاشة التحميل الاحترافية (Loader)
+           ========================================== */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 520px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.8s ease-out;
+            height: 100%;
+            background: #0f172a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* صورة المدرس الاحترافية */
-        .profile-wrapper {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 20px;
-        }
-
-        .profile-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+        .loader-spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(56, 189, 248, 0.1);
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
-            animation: rotateGlow 6s linear infinite;
-            z-index: -1;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 15px var(--primary-glow);
         }
-
-        @keyframes rotateGlow {
+        .loader-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .profile-img {
+        /* ==========================================
+           3. الهيدر وشريط التنقّل (Header & Navbar)
+           ========================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 900;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        header.scrolled {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 10px 5%;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo i {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+        }
+        .menu-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .menu-btn:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================
+           4. القائمة الجانبية (Glassmorphic Sidebar)
+           ========================================== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-left: 1px solid var(--glass-border);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sidebar.active {
+            right: 0;
+        }
+        .sidebar-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .sidebar-close:hover {
+            color: var(--primary);
+        }
+        
+        /* بطاقة الطالب داخل السايدبار */
+        .user-profile-card {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+        }
+        .user-profile-card .avatar {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 12px;
+            font-size: 1.8rem;
+            color: #fff;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        .user-status-badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--success);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 8px;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .sidebar-menu li a:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+            transform: translateX(-5px);
+        }
+        .sidebar-menu li a i {
+            font-size: 1.2rem;
+            color: var(--accent);
+            transition: color 0.3s;
+        }
+        .sidebar-menu li a:hover i {
+            color: var(--primary);
+        }
+
+        /* القناع الخلفي للسايدبار */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--bg-dark);
-            background: #1e293b;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 950;
+            display: none;
+        }
+        .sidebar-overlay.active {
+            display: block;
         }
 
-        .title {
-            font-size: 26px;
+        /* ==========================================
+           5. واجهة البطل والعد التنازلي (Hero Section)
+           ========================================== */
+        .hero {
+            padding: 160px 5% 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        .hero-badge {
+            background: rgba(129, 140, 248, 0.15);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .hero h1 {
+            font-size: 3rem;
             font-weight: 900;
-            background: linear-gradient(to left, #fff, #94a3b8);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(to left, #fff, var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
         }
 
-        .subtitle {
-            font-size: 18px;
+        /* العداد التنازلي الاحترافي */
+        .countdown-container {
+            padding: 25px 40px;
+            max-width: 650px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .countdown-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .countdown-item {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            min-width: 80px;
+        }
+        .countdown-time {
+            font-size: 2rem;
+            font-weight: 900;
             color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 25px;
+            text-shadow: 0 0 10px var(--primary-glow);
         }
-
-        .announcement-box {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(56, 189, 248, 0.15);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 25px;
-        }
-
-        .announcement-box p {
-            font-size: 14px;
-            line-height: 1.7;
-            color: #cbd5e1;
-        }
-
-        .announcement-box .highlight {
-            color: #fff;
-            font-weight: 700;
-            display: block;
+        .countdown-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
             margin-top: 5px;
         }
 
-        .announcement-box .date-range {
-            color: var(--accent);
-            font-weight: 900;
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-
-        .timer-title {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 10px;
+        .btn {
+            padding: 14px 32px;
+            border-radius: 30px;
             font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #0f172a;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 24px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-muted);
+            transform: translateY(-3px);
         }
 
-        .countdown-container {
+        /* ==========================================
+           6. الاستمارات والنوافذ المنبثقة (Modals & Forms)
+           ========================================== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
             display: flex;
             justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 20px;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        .modal-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            z-index: 2100;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 35px;
+        }
+        .modal.active .modal-wrapper {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
             gap: 10px;
+        }
+        .modal-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
             margin-bottom: 25px;
         }
 
-        .time-segment {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            min-width: 60px;
-            padding: 8px;
-            border-radius: 12px;
+        /* تنسيق عناصر حقول المدخلات */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
         }
-
-        .time-num {
-            font-size: 20px;
-            font-weight: 700;
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
             color: #fff;
-            display: block;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+        select.form-control option {
+            background: #1e293b;
+            color: #fff;
         }
 
-        .time-label {
-            font-size: 10px;
-            color: #64748b;
+        .booking-type-toggle {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
         }
-
-        /* حاويات الأقسام التبادلية */
-        .view-section {
-            display: none;
+        .type-option {
+            flex: 1;
+            position: relative;
         }
-
-        .view-section.active {
-            display: block;
-            animation: slideIn 0.4s ease-out;
+        .type-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .links-group {
+        .type-label {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-        }
-
-        .action-btn {
-            display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 16px 22px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: white;
-            font-weight: 700;
-            font-size: 15px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 8px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
             cursor: pointer;
-            border: none;
-            outline: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .type-option input:checked + .type-label {
+            background: rgba(56, 189, 248, 0.08);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+        }
+        .type-label i {
+            font-size: 1.4rem;
         }
 
-        .action-btn div {
+        /* ==========================================
+           7. قسم الفيديوهات والمحتوى المشروط (Videos Section)
+           ========================================== */
+        .main-content {
+            padding: 40px 5% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            position: relative;
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
-        .action-btn div i { font-size: 18px; }
-        .action-btn i:last-child { font-size: 12px; opacity: 0.6; transition: transform 0.3s; }
-        .action-btn:hover { transform: translateY(-3px); }
-        .action-btn:hover i:last-child { transform: translateX(-4px); opacity: 1; }
-
-        /* أزرار الصفحة الرئيسية */
-        .btn-main-booking {
-            background: linear-gradient(135deg, #00f2fe, #4facfe);
-            color: #0b0f19;
+        .section-title i {
+            color: var(--primary);
         }
-        .btn-main-booking:hover { box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
-
-        .btn-app { background: linear-gradient(135deg, #df8300, #b56500); }
-        .btn-app:hover { box-shadow: 0 0 20px rgba(223, 131, 0, 0.4); }
-
-        .btn-youtube { background: linear-gradient(135deg, #e50914, #b20710); }
-        .btn-youtube:hover { box-shadow: 0 0 20px rgba(229, 9, 20, 0.4); }
-
-        /* ستايل الفورم الاستمارة */
-        .form-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
+        .student-stats-badge {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
-
-        .back-link {
-            color: #94a3b8;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-        .back-link:hover { color: var(--accent); }
-
-        .form-group {
-            text-align: right;
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 6px;
+        .student-stats-badge span {
+            color: var(--primary);
             font-weight: 700;
         }
 
-        .input-wrapper {
+        /* حالة قفل الفيديوهات لغير المسجلين */
+        .locked-state {
+            padding: 60px 30px;
+            text-align: center;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .locked-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            color: #ef4444;
+            margin: 0 auto 25px;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .locked-state h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .locked-state p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        /* شبكة عرض كروت الفيديو */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .video-card {
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
             position: relative;
         }
-
-        .input-wrapper i {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-            font-size: 14px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 40px 12px 14px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            color: white;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .form-control:focus {
-            outline: none;
+        .video-card:hover {
+            transform: translateY(-6px);
             border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
         }
-
-        select.form-control {
-            appearance: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-        }
-
-        /* الحقول المتغيرة الديناميكية */
-        .sub-stage-box {
-            display: none;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px dashed rgba(255,255,255,0.1);
-            margin-top: 10px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .btn-submit-booking {
-            background: linear-gradient(135deg, #25d366, #128c7e);
+        .thumbnail-container {
+            position: relative;
             width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #020617;
+        }
+        .thumbnail-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .video-card:hover .thumbnail-img {
+            transform: scale(1.05);
+        }
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
+            align-items: center;
+            transition: background 0.3s;
         }
-        .btn-submit-booking:hover { box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); }
-
-        .error-msg {
-            color: var(--accent);
-            font-size: 12px;
-            text-align: right;
-            margin-top: 4px;
-            display: none;
-            font-weight: bold;
+        .video-card:hover .play-overlay {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .play-btn-circle {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: #0f172a;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--primary-glow);
+            transition: all 0.3s;
+        }
+        .video-card:hover .play-btn-circle {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        .video-info {
+            padding: 18px;
+        }
+        .video-tag {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .video-title {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-main);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .footer-credit {
-            margin-top: 35px;
-            font-size: 11px;
-            color: #475569;
+        /* تأثير الـ Skeleton Loading للمحاكاة الاحترافية */
+        .skeleton-card {
+            border-radius: 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
+        .skeleton-thumb {
+            width: 100%;
+            padding-top: 56.25%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite;
+        }
+        .skeleton-info {
+            padding: 18px;
+        }
+        .skeleton-text {
+            height: 14px;
+            background: rgba(255,255,255,0.04);
+            margin-bottom: 10px;
+            border-radius: 4px;
+            animation: loading-shimmer 1.5s infinite;
+        }
+        @keyframes loading-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ==========================================
+           8. نافذة مشغل الفيديو (Video Player Modal)
+           ========================================== */
+        .player-modal-wrapper {
+            max-width: 900px !important;
+            padding: 0 !important;
+            overflow: hidden;
+            background: #000 !important;
+            border: 1px solid rgba(255,255,255,0.15) !important;
+        }
+        .video-container {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Dynamic Embed */
+            width: 100%;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ==========================================
+           9. الإشعارات والزر العائم (Floating Components)
+           ========================================== */
+        /* زر واتساب عائم ومشع */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #25d366;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 800;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        /* إشعار الترحيب المخصص */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: -400px;
+            max-width: 350px;
+            padding: 15px 20px;
+            z-index: 2500;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast-notification.active {
+            right: 30px;
+        }
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(52, 211, 153, 0.2);
+            border-radius: 50%;
+            color: var(--success);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        .toast-body h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .toast-body p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================
+           10. متجاوب مع الهواتف (Responsive Layout)
+           ========================================== */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            header.scrolled { padding: 10px 20px; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 0.95rem; }
+            .countdown-container { padding: 15px 20px; }
+            .countdown { gap: 10px; }
+            .countdown-time { font-size: 1.5rem; }
+            .main-content { padding: 20px 20px 80px; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .whatsapp-float { bottom: 20px; left: 20px; width: 50px; height: 50px; font-size: 24px; }
+            .toast-notification { width: calc(100% - 40px); left: 20px; right: auto; transform: translateY(150px); transition: transform 0.4s ease; }
+            .toast-notification.active { right: auto; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">مِستر رِيَاضِيَّات.. جارٍ التحميل</div>
+    </div>
 
-    <div class="main-card">
-        <!-- هيدر الكارد ثابت وثقة للمدرس -->
-        <div class="profile-wrapper">
-            <img src="https://i.postimg.cc/cHpRVyTv/1759964417320.png" alt="أ/ مينا دياب" class="profile-img">
+    <header id="mainHeader">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-calculator"></i>
+            <span>مستر رياضيات</span>
+        </a>
+        <button class="menu-btn" onclick="toggleSidebar(true)">
+            <i class="fa-solid fa-bars-staggered"></i>
+            <span>القائمة</span>
+        </button>
+    </header>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
+
+    <nav class="sidebar" id="sidebarMenu">
+        <button class="sidebar-close" onclick="toggleSidebar(false)">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div id="sidebarUserCard">
+            </div>
+
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="openDownloadApp()"><i class="fa-solid fa-mobile-screen-button"></i>تنزيل التطبيق</a></li>
+            <li><a href="#" onclick="handleBookingAction()"><i class="fa-solid fa-calendar-check"></i>الحجز الإلكتروني</a></li>
+            <li><a href="#free-videos" onclick="toggleSidebar(false)"><i class="fa-solid fa-graduation-cap"></i>الفيديوهات المجانية</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">مستقبل مشرق في الرياضيات</div>
+        <h1>طريقك نحو تقفيل الدرجة النهائية</h1>
+        <p>ابدأ رحلة التميز والعبقرية الآن مع أقوى الشروحات والحلول المبسطة للمناهج الدراسية، مصممة خصيصاً لمساعدتك على التفوق.</p>
+
+        <div class="countdown-container glass-card">
+            <div class="countdown-title"><i class="fa-regular fa-clock"></i> ينتهي الحجز والتسجيل المبكر خلال:</div>
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-time" id="cdDays">00</div>
+                    <div class="countdown-label">أيام</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-time" id="cdHours">00</div>
+                    <div class="countdown-label">ساعات</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-time" id="cdMinutes">00</div>
+                    <div class="countdown-label">دقائق</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-time" id="cdSeconds">00</div>
+                    <div class="countdown-label">ثواني</div>
+                </div>
+            </div>
         </div>
-        <h1 class="title">الإبداع في الرياضيات</h1>
-        <h2 class="subtitle">أ/ مينا دياب</h2>
 
-        <!-- ================= الجزء الأول: الصفحة الرئيسية للموقع ================= -->
-        <div id="homeView" class="view-section active">
-            <div class="announcement-box">
-                <p>يعلن الأستاذ مينا دياب عن فتح باب الحجز والاشتراك <span class="highlight">للمرحلتين <span style="color: var(--primary)">الإعدادية</span> و <span style="color: var(--primary)">الثانوية</span></span></p>
-                <span class="highlight date-range">من 1 / 7 حتي 10 / 7</span>
+        <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="handleBookingAction()"><i class="fa-solid fa-user-plus"></i>احجز مكانك الآن</button>
+            <a href="#free-videos" class="btn btn-secondary"><i class="fa-solid fa-play"></i>شاهد المحاضرات المجانية</a>
+        </div>
+    </section>
+
+    <main class="main-content" id="free-videos">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fa-solid fa-circle-play"></i>
+                <h2>المحاضرات والفيديوهات المجانية</h2>
             </div>
-
-            <div class="timer-title"><i class="fa-regular fa-clock"></i> متبقي على إغلاق الحجز</div>
-            <div class="countdown-container" id="countdown">
-                <div class="time-segment"><span class="time-num" id="days">00</span><span class="time-label">أيام</span></div>
-                <div class="time-segment"><span class="time-num" id="hours">00</span><span class="time-label">ساعة</span></div>
-                <div class="time-segment"><span class="time-num" id="minutes">00</span><span class="time-label">دقيقة</span></div>
-                <div class="time-segment"><span class="time-num" id="seconds">00</span><span class="time-label">ثانية</span></div>
-            </div>
-
-            <div class="links-group">
-                <!-- زرار اضغط هنا للحجز الجديد الساحر -->
-                <button onclick="switchView('formView')" class="action-btn btn-main-booking">
-                    <div>
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <span>اضغط هنا لتسجيل الحجز الالكتروني</span>
-                    </div>
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-
-                <a href="https://play.google.com/store/apps/details?id=com.mickode.elebdaa" target="_blank" class="action-btn btn-app">
-                    <div>
-                        <i class="fab fa-google-play"></i>
-                        <span>تنزيل تطبيق الإبداع الرسمي</span>
-                    </div>
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-
-                <a href="https://youtube.com/channel/UCggCfYjV25vor3RPTmo1wZA?si=dZ_OPl4A8trc2wZ5" target="_blank" class="action-btn btn-youtube">
-                    <div>
-                        <i class="fab fa-youtube"></i>
-                        <span>تابعنا على قناة اليوتيوب</span>
-                    </div>
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-            </div>
+            <div id="statsBadgeContainer">
+                </div>
         </div>
 
-
-        <!-- ================= الجزء الثاني: صفحة استمارة الحجز الذكية ================= -->
-        <div id="formView" class="view-section">
-            <div class="form-header">
-                <span style="font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen-to-square"></i> استمارة بيانات الطالب</span>
-                <span class="back-link" onclick="switchView('homeView')"><i class="fa-solid fa-arrow-left-long"></i> عودة للرئيسية</span>
+        <div id="videosDisplayArea">
             </div>
+    </main>
 
-            <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
-                <!-- حقل الاسم الثلاثي -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-overlay" onclick="closeModal('bookingModal')"></div>
+        <div class="modal-wrapper glass-card">
+            <button class="modal-close" onclick="closeModal('bookingModal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-title">
+                <i class="fa-solid fa-address-card"></i>
+                <span>استمارة الحجز الإلكتروني</span>
+            </div>
+            <div class="modal-subtitle">يرجى إدخال البيانات بدقة للانضمام الفوري للمنصة</div>
+            
+            <form id="bookingForm" onsubmit="executeBooking(event)">
                 <div class="form-group">
-                    <label for="studentName">الاسم بالثلاثي *</label>
-                    <div class="input-wrapper">
-                        <i class="fa-regular fa-user"></i>
-                        <input type="text" id="studentName" class="form-control" placeholder="اكتب اسمك الثلاثي الكامل هنا" required>
-                    </div>
-                    <div id="nameError" class="error-msg">الرجاء كتابة الاسم ثلاثي بشكل صحيح.</div>
+                    <label>الاسم الثلاثي للطالب</label>
+                    <input type="text" id="studentName" class="form-control" placeholder="أدخل اسمك بالكامل" required>
                 </div>
 
-                <!-- حقل اختيار المرحلة الأساسية -->
                 <div class="form-group">
-                    <label for="mainStage">المرحلة الدراسية *</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <select id="mainStage" class="form-control" onchange="handleStageChange()" required>
-                            <option value="" disabled selected>اختر المرحلة الدراسية</option>
-                            <option value="إعدادي">المرحلة الإعدادية</option>
-                            <option value="ثانوي">المرحلة الثانوية</option>
-                        </select>
-                    </div>
+                    <label>المرحلة الدراسية</label>
+                    <select id="educationalLevel" class="form-control" onchange="updateGradesDropdown()" required>
+                        <option value="" disabled selected>اختر المرحلة الدراسية</option>
+                        <option value="prep">المرحلة الإعدادية</option>
+                        <option value="sec">المرحلة الثانوية</option>
+                    </select>
                 </div>
 
-                <!-- حقل اختيار الصف الفرعي (بيتفتح ديناميكياً) -->
-                <div id="subStageContainer" class="form-group sub-stage-box">
-                    <label id="subStageLabel" for="subStage">الصف الدراسي *</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-book-open"></i>
-                        <select id="subStage" class="form-control">
-                            <!-- الخيارات بيتم ضخها بالجافاسكريبت بناء على اختيار المرحلة فوق -->
-                        </select>
-                    </div>
-                </div>
-
-                <!-- حقل رقم الطالب -->
                 <div class="form-group">
-                    <label for="studentPhone">رقم هاتف الطالب (واتساب) *</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                        <input type="tel" id="studentPhone" class="form-control" placeholder="مثال: 01012345678" pattern="[0-9]{11}" title="يجب إدخال رقم موبايل مصري مكون من 11 رقم" required>
-                    </div>
+                    <label>الصف الدراسي</label>
+                    <select id="studentGrade" class="form-control" required>
+                        <option value="" disabled selected>اختر المرحلة أولاً</option>
+                    </select>
                 </div>
 
-                <!-- حقل رقم ولي الأمر -->
                 <div class="form-group">
-                    <label for="parentPhone">رقم هاتف ولي الأمر *</label>
-                    <div class="input-wrapper">
-                        <i class="fa-solid fa-phone-volume"></i>
-                        <input type="tel" id="parentPhone" class="form-control" placeholder="مثال: 01112345678" pattern="[0-9]{11}" title="يجب إدخال رقم موبايل مصري مكون من 11 رقم" required>
+                    <label>نوع الحجز الآمن</label>
+                    <div class="booking-type-toggle">
+                        <div class="type-option">
+                            <input type="radio" name="bookingType" id="typeCenter" value="center" checked>
+                            <label for="typeCenter" class="type-label">
+                                <i class="fa-solid fa-building-user"></i>
+                                <span>داخل السنتر</span>
+                            </label>
+                        </div>
+                        <div class="type-option">
+                            <input type="radio" name="bookingType" id="typeOnline" value="online">
+                            <label for="typeOnline" class="type-label">
+                                <i class="fa-solid fa-globe"></i>
+                                <span>أونلاين بالمنصة</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <!-- زرار الإرسال وتوليد رسالة الواتساب المنسقة -->
-                <button type="submit" class="action-btn btn-submit-booking">
-                    <i class="fab fa-whatsapp"></i>
-                    <span>حجز الآن وتأكيد البيانات</span>
+                <div class="form-group">
+                    <label>رقم هاتف الطالب (واتساب)</label>
+                    <input type="tel" id="studentPhone" class="form-control" placeholder="01xxxxxxxxx" required pattern="[0-9]{11}">
+                </div>
+
+                <div class="form-group">
+                    <label>رقم هاتف ولي الأمر</label>
+                    <input type="tel" id="parentPhone" class="form-control" placeholder="01xxxxxxxxx" required pattern="[0-9]{11}">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                    <i class="fa-solid fa-paper-plane"></i> تأكيد وإتمام الحجز فوراً
                 </button>
             </form>
         </div>
+    </div>
 
-        <div class="footer-credit">
-            &copy; 2026 جميع الحقوق محفوظة لمنصة الإبداع
+    <div class="modal" id="playerModal">
+        <div class="modal-overlay" onclick="closeVideoPlayer()"></div>
+        <div class="modal-wrapper glass-card player-modal-wrapper">
+            <button class="modal-close" onclick="closeVideoPlayer()" style="z-index: 10; top: 15px; left: 15px;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="video-container">
+                <iframe id="videoIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/201275305035" class="whatsapp-float" target="_blank" title="تواصل عبر الواتساب">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <div class="toast-notification glass-card" id="welcomeToast">
+        <div class="toast-icon">
+            <i class="fa-solid fa-bell"></i>
+        </div>
+        <div class="toast-body">
+            <h4 id="toastTitle">تم بنجاح!</h4>
+            <p id="toastMessage">مرحباً بك مجدداً في منصتك.</p>
         </div>
     </div>
 
     <script>
-        // التنقل بين الصفحات بدون تحميل (Smooth Switch)
-        function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(view => {
-                view.classList.remove('active');
-            });
-            document.getElementById(viewId).classList.add('active');
+        /* ==========================================
+           بيانات وقاعدة فيديوهات اليوتيوب المخصصة لكل صف
+           ========================================== */
+        const playlistDatabase = {
+            "first_sec": [
+                { url: "https://youtu.be/J78j_SGXtnw", title: "مقدمة في الجبر والمصفوفات - المحاضرة الأولى" },
+                { url: "https://youtu.be/v3wuOJ5j7gk", title: "تحديد نوع جذري المعادلة التربيعية" },
+                { url: "https://youtu.be/xqo6XxwrN9I", title: "العلاقة بين جذري معادلة الدرجة الثانية" },
+                { url: "https://youtu.be/tCjIXATymyY", title: "حساب المثلثات: الزاوية الموجهة" },
+                { url: "https://youtu.be/wpq0-3g0GfA", title: "الوحدات القياسية والدائرية لقياس الزوايا" },
+                { url: "https://youtu.be/MR29APJJ2tc", title: "الهندسة المستوية: تشابه المثلثات" },
+                { url: "https://youtu.be/9VcoWJubZ5w", title: "ح حالات تشابه المثلثات وتطبيقاتها" },
+                { url: "https://youtu.be/pnPI-sbgmTM", title: "مبرهنة تاليس في الهندسة" },
+                { url: "https://youtu.be/xioLBu3VYds", title: "مراجعة وحل اختبار الجبر الشامل" }
+            ],
+            "second_sec": [
+                { url: "https://youtu.be/yM7pdvzNxUY", title: "مفهوم النهايات والاتصال - تفاضل" },
+                { url: "https://youtu.be/Z10u81GIwa0", title: "الدوال الحقيقية ورسم المنحنيات - جبر" }
+            ],
+            "third_prep": [
+                { url: "https://youtu.be/tP7wDaFuKsI", title: "حاصل الضرب الديكارتي - المحاضرة التمهيدية" },
+                { url: "https://youtu.be/n-i8o2kPpRQ", title: "العلاقات والدوال المتقدمة" },
+                { url: "https://youtu.be/-Kk5DY44bHo", title: "حساب المثلثات: النسب المثلثية الأساسية" },
+                { url: "https://youtu.be/5CDsd6mvHWI", title: "الهندسة التحليلية: البعد بين نقطتين" }
+            ]
+        };
+
+        // مخرجات نصوص الصفوف لعرضها للمستخدم بشكل احترافي
+        const gradeLabels = {
+            "third_prep": "الثالث الإعدادي",
+            "first_sec": "الأول الثانوي",
+            "second_sec": "الثاني الثانوي"
+        };
+
+        /* تأثير سكرول الهيدر */
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        /* تشغيل وإيقاف الـ Loader والعداد التنازلي عند التشغيل الافتتاحي */
+        document.addEventListener("DOMContentLoaded", () => {
+            // إنهاء وإخفاء شاشة الـ Loader
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+            }, 1200);
+
+            // تشغيل العداد التنازلي التفاعلي المتقدم (10 أيام من وقت الفتح الحالي)
+            initCountdown();
+
+            // فحص حالة الحجز الحالية وتخصيص تجربة العرض
+            renderPlatformState();
+        });
+
+        /* فتح وإغلاق القائمة الجانبية السايدبار */
+        function toggleSidebar(open) {
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (open) {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+            } else {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
         }
 
-        // التعامل مع تغير خيارات المرحلة (إعدادي / ثانوي) وتحديث القائمة الفرعية
-        function handleStageChange() {
-            const mainStage = document.getElementById('mainStage').value;
-            const subStageContainer = document.getElementById('subStageContainer');
-            const subStageSelect = document.getElementById('subStage');
+        /* تحديث قائمة الصفوف بناءً على المرحلة المحددة بالاستمارة */
+        function updateGradesDropdown() {
+            const level = document.getElementById('educationalLevel').value;
+            const gradeSelect = document.getElementById('studentGrade');
             
-            // مسح الخيارات القديمة
-            subStageSelect.innerHTML = '';
+            gradeSelect.innerHTML = '';
+            
+            if (level === 'prep') {
+                const opt = document.createElement('option');
+                opt.value = 'third_prep';
+                opt.textContent = 'الصف الثالث الإعدادي';
+                gradeSelect.appendChild(opt);
+            } else if (level === 'sec') {
+                const opt1 = document.createElement('option');
+                opt1.value = 'first_sec';
+                opt1.textContent = 'الصف الأول الثانوي';
+                gradeSelect.appendChild(opt1);
 
-            if (mainStage === 'إعدادي') {
-                subStageSelect.innerHTML = `
-                    <option value="" disabled selected>اختر الصف الإعدادي</option>
-                    <option value="أولى إعدادي">أولى إعدادي</option>
-                    <option value="ثانية إعدادي">ثانية إعدادي</option>
-                    <option value="ثالثة إعدادي">ثالثة إعدادي</option>
-                `;
-                subStageContainer.style.display = 'block';
-                subStageSelect.required = true;
-            } else if (mainStage === 'ثانوي') {
-                subStageSelect.innerHTML = `
-                    <option value="" disabled selected>اختر الصف الثانوي</option>
-                    <option value="أولى ثانوي">أولى ثانوي</option>
-                    <option value="ثانية ثانوي">ثانية ثانوي</option>
-                    <option value="ثالثة ثانوي">ثالثة ثانوي</option>
-                `;
-                subStageContainer.style.display = 'block';
-                subStageSelect.required = true;
-            } else {
-                subStageContainer.style.display = 'none';
-                subStageSelect.required = false;
+                const opt2 = document.createElement('option');
+                opt2.value = 'second_sec';
+                opt2.textContent = 'الصف الثاني الثانوي';
+                gradeSelect.appendChild(opt2);
             }
         }
 
-        // معالجة وضبط البيانات قبل الإرسال للواتساب
-        function handleBookingSubmit(event) {
-            event.preventDefault(); // منع الصفحة من التحديث الافتراضي
+        /* وظائف التحكم بالنوافذ النبثقة */
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
 
+        /* معالجة نقرة الحجز من القائمة أو الـ Hero */
+        function handleBookingAction() {
+            toggleSidebar(false);
+            const studentData = localStorage.getItem('registeredStudent');
+            if(studentData) {
+                showToast("أنت مسجل بالفعل!", "بيانات حجزك نشطة وتعمل بشكل ممتاز.", "success");
+            } else {
+                openModal('bookingModal');
+            }
+        }
+
+        /* تنفيذ وعملية الحجز وتخزينها */
+        function executeBooking(event) {
+            event.preventDefault();
+            
             const name = document.getElementById('studentName').value.trim();
-            const mainStage = document.getElementById('mainStage').value;
-            const subStage = document.getElementById('subStage').value;
-            const studentPhone = document.getElementById('studentPhone').value.trim();
-            const parentPhone = document.getElementById('parentPhone').value.trim();
-            const nameError = document.getElementById('nameError');
+            const grade = document.getElementById('studentGrade').value;
+            const type = document.querySelector('input[name="bookingType"]:checked').value;
+            const sPhone = document.getElementById('studentPhone').value;
+            const pPhone = document.getElementById('parentPhone').value;
 
-            // التحقق من أن الاسم يحتوي على الأقل على كلمتين مسافتين (يعني 3 كلمات كحد أدنى)
-            const nameWords = name.split(/\s+/).filter(word => word.length > 0);
-            if (nameWords.length < 3) {
-                nameError.style.display = 'block';
-                document.getElementById('studentName').focus();
-                return;
-            } else {
-                nameError.style.display = 'none';
-            }
+            const studentObject = {
+                name: name,
+                grade: grade,
+                type: type,
+                studentPhone: sPhone,
+                parentPhone: pPhone,
+                timestamp: new Date().getTime()
+            };
 
-            // رقم المستر مينا دياب التلقائي الموجه له الحجز
-            const teacherWhatsappNumber = "201035148166";
-
-            // صياغة نص الرسالة الاحترافية المنسقة للواتساب بالرموز التعبيرية
-            const messageText = `اريد الحجز\n\n` +
-                                `📝 *الاسم:* ${name}\n` +
-                                `🎓 *الصف:* ${subStage} (${mainStage})\n` +
-                                `📱 *رقم الطالب:* ${studentPhone}\n` +
-                                `👨‍💼 *رقم ولي الأمر:* ${parentPhone}`;
-
-            // ترميز النص ليصبح متوافقاً كلياً مع روابط الويب
-            const encodedMessage = encodeURIComponent(messageText);
-
-            // إنشاء الرابط السحري للواتساب
-            const whatsappUrl = `https://wa.me/${teacherWhatsappNumber}?text=${encodedMessage}`;
-
-            // فتح الواتساب فوراً في صفحة جديدة تمكن الطالب من الإرسال السريع بنقرة واحدة
-            window.open(whatsappUrl, '_blank');
+            // تخزين البيانات محلياً داخل المتصفح
+            localStorage.setItem('registeredStudent', JSON.stringify(studentObject));
+            
+            closeModal('bookingModal');
+            
+            // إعادة بناء واجهة المستخدم وتحديث محتوى الفيديوهات
+            renderPlatformState();
+            
+            // إظهار تنبيه ترحيبي خلاب باسم الطالب
+            setTimeout(() => {
+                showToast(`أهلاً بك يا ${name}`, "تم تسجيل حجزك بنجاح ومتاح لك الآن الفيديوهات المجانية.", "success");
+            }, 400);
         }
 
-        // كود العداد التنازلي التفاعلي الممتد ليوليو 2026
-        const targetDate = new Date("July 10, 2026 23:59:59").getTime();
-        const countdownFunction = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+        /* فحص حالة النظام وعرض عناصر الواجهة بشكل مشروط احترافي */
+        function renderPlatformState() {
+            const studentData = localStorage.getItem('registeredStudent');
+            const userCardContainer = document.getElementById('sidebarUserCard');
+            const statsContainer = document.getElementById('statsBadgeContainer');
+            const displayArea = document.getElementById('videosDisplayArea');
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            if (studentData) {
+                // الطالب مسجل
+                const student = JSON.parse(studentData);
+                const gradeText = gradeLabels[student.grade] || "غير محدد";
 
-            document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
-            document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+                // 1. بناء بطاقة معلومات الطالب داخل السايدبار
+                userCardContainer.innerHTML = `
+                    <div class="user-profile-card">
+                        <div class="avatar"><i class="fa-solid fa-user-graduate"></i></div>
+                        <h3 style="font-size:1.1rem; font-weight:700;">${student.name}</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">صف: ${gradeText}</p>
+                        <span class="user-status-badge"><i class="fa-solid fa-circle-check"></i> تم الحجز بنجاح (${student.type === 'center' ? 'سنتر' : 'أونلاين'})</span>
+                    </div>
+                `;
 
-            if (distance < 0) {
-                clearInterval(countdownFunction);
-                document.getElementById("countdown").innerHTML = "<span style='color: var(--accent); font-weight: bold; font-size: 14px;'>انتهت فترة الحجز الرسمية!</span>";
+                // 2. حساب وعرض إحصائية الفيديوهات المتاحة لصفه الدراسي
+                const targetVideos = playlistDatabase[student.grade] || [];
+                statsContainer.innerHTML = `
+                    <div class="student-stats-badge">
+                        الصف: <span>${gradeText}</span> | المحاضرات المتاحة لك: <span>${targetVideos.length} فيديو</span>
+                    </div>
+                `;
+
+                // 3. محاكاة الـ Skeleton Loading الخلابة قبل إظهار الفيديوهات الفعلية لتعزيز الاحترافية
+                renderSkeletonLoading(displayArea, targetVideos.length);
+
+                setTimeout(() => {
+                    renderActualVideos(displayArea, targetVideos, gradeText);
+                }, 1000);
+
+            } else {
+                // الطالب غير مسجل أو جديد تماماً على الموقع
+                // 1. بطاقة افتراضية بالسايدبار تحث على الحجز
+                userCardContainer.innerHTML = `
+                    <div class="user-profile-card" style="border-style: dashed;">
+                        <p style="font-size:0.9rem; color:var(--text-muted);">أنت غير مسجل بالمنصة حالياً</p>
+                        <button class="btn btn-primary" onclick="handleBookingAction()" style="padding:8px 18px; font-size:0.85rem; margin-top:10px;">
+                            <i class="fa-solid fa-key"></i> سجل حجزك الآن
+                        </button>
+                    </div>
+                `;
+
+                // 2. إخفاء الإحصائية
+                statsContainer.innerHTML = '';
+
+                // 3. إظهار رسالة الحجب والقفل للمقاطع المجانية
+                displayArea.innerHTML = `
+                    <div class="locked-state glass-card">
+                        <div class="locked-icon">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3>المحتوى مغلق ومحمي!</h3>
+                        <p>عذراً، يجب إتمام الحجز الإلكتروني أولاً لتتمكن من فتح وتصفح الفيديوهات والمحاضرات المجانية الخاصة بصفك الدراسي.</p>
+                        <button class="btn btn-primary" onclick="handleBookingAction()">
+                            <i class="fa-solid fa-calendar-check"></i> اذهب للحجز الآن
+                        </button>
+                    </div>
+                `;
             }
-        }, 1000);
+        }
+
+        /* بناء هيكل الـ Skeleton Loading للمحاكاة */
+        function renderSkeletonLoading(targetElement, count) {
+            let skeletonsHTML = '<div class="video-grid">';
+            const repeatCount = count > 0 ? count : 4;
+            for (let i = 0; i < repeatCount; i++) {
+                skeletonsHTML += `
+                    <div class="skeleton-card">
+                        <div class="skeleton-thumb"></div>
+                        <div class="skeleton-info">
+                            <div class="skeleton-text" style="width: 40%;"></div>
+                            <div class="skeleton-text" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            skeletonsHTML += '</div>';
+            targetElement.innerHTML = skeletonsHTML;
+        }
+
+        /* تحويل واستخراج المعطيات لبناء كروت الفيديوهات الفعلية */
+        function renderActualVideos(targetElement, videos, gradeText) {
+            if (videos.length === 0) {
+                targetElement.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:40px;">لا توجد فيديوهات مرفوعة حالياً لهذا الصف.</p>`;
+                return;
+            }
+
+            let gridHTML = '<div class="video-grid">';
+            videos.forEach((video) => {
+                const videoId = extractYouTubeId(video.url);
+                // استخدام الصورة المصغرة الرسمية عالية الجودة من يوتيوب بشكل مباشر
+                const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+
+                gridHTML += `
+                    <div class="video-card glass-card" onclick="openVideoPlayer('${videoId}')">
+                        <div class="thumbnail-container">
+                            <img src="${thumbnailUrl}" class="thumbnail-img" alt="صورة فيديو" loading="lazy">
+                            <div class="play-overlay">
+                                <div class="play-btn-circle">
+                                    <i class="fa-solid fa-play"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-tag">${gradeText}</span>
+                            <div class="video-title" title="${video.title}">${video.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            gridHTML += '</div>';
+            targetElement.innerHTML = gridHTML;
+        }
+
+        /* دالة برمجية ذكية لاستخراج الـ ID من روابط يوتيوب بمختلف صيغها */
+        function extractYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        /* تشغيل مشغل الفيديو بـ Modal مخصص ورابط الـ Embed */
+        function openVideoPlayer(videoId) {
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            openModal('playerModal');
+        }
+
+        /* إغلاق مشغل الفيديو لمنع استمرار الصوت بالخلفية */
+        function closeVideoPlayer() {
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = ''; // تصفير المصدر يضمن إيقاف التشغيل فوراً
+            closeModal('playerModal');
+        }
+
+        /* نظام التنبيهات المنبثقة الاحترافي السفلي (Toast) */
+        function showToast(title, message, type = "success") {
+            const toast = document.getElementById('welcomeToast');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            
+            const iconNode = toast.querySelector('.toast-icon i');
+            if(type === 'success') {
+                toast.querySelector('.toast-icon').style.color = 'var(--success)';
+                iconNode.className = 'fa-solid fa-circle-check';
+            }
+
+            toast.classList.add('active');
+
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 4500);
+        }
+
+        /* رسالة منبثقة تفاعلية لتنزيل تطبيق الموبايل لعدم وجود تطبيق حقيقي مرفوع حالياً */
+        function openDownloadApp() {
+            toggleSidebar(false);
+            showToast("تطبيق الأندرويد قريبًا!", "نعمل حالياً على إطلاق التطبيق الخاص بمستر رياضيات على Google Play.", "success");
+        }
+
+        /* بناء العداد التنازلي التفاعلي */
+        function initCountdown() {
+            // تحديد وقت انتهاء الحجز (10 أيام من وقت فتح الطالب الفعلي للموقع)
+            let targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 10);
+            
+            function updateTimer() {
+                const now = new Date().getTime();
+                const difference = targetDate.getTime() - now;
+                
+                if (difference <= 0) {
+                    clearInterval(intervalId);
+                    return;
+                }
+                
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                
+                document.getElementById('cdDays').textContent = days < 10 ? '0' + days : days;
+                document.getElementById('cdHours').textContent = hours < 10 ? '0' + hours : hours;
+                document.getElementById('cdMinutes').textContent = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById('cdSeconds').textContent = seconds < 10 ? '0' + seconds : seconds;
+            }
+            
+            updateTimer();
+            const intervalId = setInterval(updateTimer, 1000);
+        }
+    </script>
+
+    <style>
+        /* إضافة ستايل كارت المعلم الفاخر والجملة الإعلانية */
+        .teacher-announcement-card {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            max-width: 850px;
+            width: 90%;
+            margin: -30px auto 40px auto;
+            padding: 25px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.05);
+            z-index: 10;
+            position: relative;
+        }
+        .teacher-img-wrapper {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .teacher-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .announcement-content h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .announcement-content p {
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* تصغير حجم نافذة الحجز وجعلها فائقة السرعة والاحترافية */
+        #bookingModal .modal-wrapper {
+            max-width: 420px;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(56, 189, 248, 0.1);
+        }
+        #bookingModal .modal-title {
+            font-size: 1.35rem;
+        }
+        #bookingModal .modal-subtitle {
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+        #bookingModal .form-group {
+            margin-bottom: 12px;
+        }
+        #bookingModal .form-control {
+            padding: 10px 14px;
+            font-size: 0.9rem;
+        }
+        #bookingModal .booking-type-toggle {
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        #bookingModal .type-label {
+            padding: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* إضافة أزرار السوشيال ميديا الإضافية في السايدبار */
+        .sidebar-social-links {
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-btn.fb:hover {
+            background: #1877f2;
+            border-color: #1877f2;
+            box-shadow: 0 0 15px rgba(24, 119, 242, 0.5);
+        }
+        .social-btn.platform:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #0f172a;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        @media (max-width: 768px) {
+            .teacher-announcement-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+                margin-top: -10px;
+            }
+            .teacher-img-wrapper {
+                width: 90px;
+                height: 90px;
+            }
+            .announcement-content p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+
+    <script>
+        // دالة إضافية ذاتية التشغيل لتنفيذ التعديلات والتحكم الفوقي بالـ DOM بأمان دون تعديل الأكواد السابقة
+        (function() {
+            // 1. إضافة كارت المعلم فوراً تحت العداد التنازلي في قسم الـ Hero
+            const countdownContainer = document.querySelector('.countdown-container');
+            if (countdownContainer) {
+                const teacherCard = document.createElement('div');
+                teacherCard.className = 'teacher-announcement-card glass-card';
+                teacherCard.innerHTML = `
+                    <div class="teacher-img-wrapper">
+                        <img src="https://i.postimg.cc/cHpRVyTv/mina_diab.png" alt="أ/ مينا دياب">
+                    </div>
+                    <div class="announcement-content">
+                        <h3>الإعلان الرسمي للمنصة</h3>
+                        <p>يعلن أ/ مينا دياب عن بدء الحجز للمرحلة الإعدادية والثانوية ابتداءً من يوم ١ / ٧ حتي يوم ١٠ / ٧. الحجز عن طريق الواتس أب فقط: 01035148166</p>
+                    </div>
+                `;
+                countdownContainer.parentNode.insertBefore(teacherCard, countdownContainer.nextSibling);
+            }
+
+            // 2. تحديث روابط أزرار السايدبار لزر التطبيق Pro الجديد وزر التواصل
+            window.openDownloadApp = function() {
+                toggleSidebar(false);
+                window.open('https://play.google.com/store/apps/details?id=com.mickode.elebdaa', '_blank');
+            };
+
+            const sidebarMenu = document.querySelector('.sidebar');
+            if (sidebarMenu) {
+                const socialContainer = document.createElement('div');
+                socialContainer.className = 'sidebar-social-links';
+                socialContainer.innerHTML = `
+                    <a href="https://www.facebook.com" target="_blank" class="social-btn fb" title="تابعنا على فيسبوك">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-btn platform" onclick="event.preventDefault(); showToast('المنصة التعليمية', 'تم ربط المنصة الرسمية بنجاح وهي تعمل الآن.', 'success');" title="المنصة الرئيسية">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                `;
+                sidebarMenu.appendChild(socialContainer);
+            }
+
+            // 3. تعديل سلوك زر الواتساب العائم ليتجه للرقم الجديد المطلـوب
+            const whatsappFloatBtn = document.querySelector('.whatsapp-float');
+            if (whatsappFloatBtn) {
+                whatsappFloatBtn.href = "https://wa.me/201035148166";
+            }
+
+            // 4. نظام حساب الوقت التنازلي الحقيقي والدقيق لغاية 10/7/2026 بدلاً من دالة الـ 10 أيام العشوائية
+            window.initCountdown = function() {
+                const targetTimestamp = new Date("July 10, 2026 00:00:00").getTime();
+                
+                function runRealTimer() {
+                    const nowTimestamp = new Date().getTime();
+                    const remainingTime = targetTimestamp - nowTimestamp;
+                    
+                    if (remainingTime <= 0) {
+                        document.getElementById('cdDays').textContent = "00";
+                        document.getElementById('cdHours').textContent = "00";
+                        document.getElementById('cdMinutes').textContent = "00";
+                        document.getElementById('cdSeconds').textContent = "00";
+                        clearInterval(realTimerIntervalId);
+                        return;
+                    }
+                    
+                    const rDays = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+                    const rHours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const rMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                    const rSeconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('cdDays').textContent = rDays < 10 ? '0' + rDays : rDays;
+                    document.getElementById('cdHours').textContent = rHours < 10 ? '0' + rHours : rHours;
+                    document.getElementById('cdMinutes').textContent = rMinutes < 10 ? '0' + rMinutes : rMinutes;
+                    document.getElementById('cdSeconds').textContent = rSeconds < 10 ? '0' + rSeconds : rSeconds;
+                }
+                
+                runRealTimer();
+                const realTimerIntervalId = setInterval(runRealTimer, 1000);
+            };
+
+            // 5. التعديل الفوقي والذكي لاستمارة الحجز لإرسال البيانات للواتساب المخصص تلقائياً لكل طالب على حدة
+            window.executeBooking = function(event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('studentName').value.trim();
+                const gradeValue = document.getElementById('studentGrade').value;
+                const type = document.querySelector('input[name="bookingType"]:checked').value;
+                const sPhone = document.getElementById('studentPhone').value;
+                const pPhone = document.getElementById('parentPhone').value;
+
+                const selectedGradeText = gradeLabels[gradeValue] || "غير محدد";
+                const selectedTypeText = type === 'center' ? 'داخل السنتر' : 'أونلاين بالمنصة';
+
+                const studentObject = {
+                    name: name,
+                    grade: gradeValue,
+                    type: type,
+                    studentPhone: sPhone,
+                    parentPhone: pPhone,
+                    timestamp: new Date().getTime()
+                };
+
+                // تخزين محلي للحفاظ على استقرار كود المنصة الأساسي
+                localStorage.setItem('registeredStudent', JSON.stringify(studentObject));
+                closeModal('bookingModal');
+                renderPlatformState();
+                
+                // صياغة رسالة الواتساب الفاخرة والمنظمة بشكل فائق الاحترافية
+                const whatsappTargetNumber = "201035148166";
+                const baseText = `*استمارة حجز إلكتروني جديدة* 🎓%0A%0A` +
+                                 `• *اسم الطالب:* ${encodeURIComponent(name)}%0A` +
+                                 `• *الصف الدراسي:* ${encodeURIComponent(selectedGradeText)}%0A` +
+                                 `• *نوع الحجز:* ${encodeURIComponent(selectedTypeText)}%0A` +
+                                 `• *رقم هاتف الطالب:* ${encodeURIComponent(sPhone)}%0A` +
+                                 `• *رقم ولي الأمر:* ${encodeURIComponent(pPhone)}%0A%0A` +
+                                 `_تم الإرسال تلقائياً عبر منصة مستر رياضيات_ ✨`;
+
+                // التوجيه الفوري والسريع للواتساب لإرسال بيانات الطالب في رسالة مستقلة
+                setTimeout(() => {
+                    window.open(`https://wa.me/${whatsappTargetNumber}?text=${baseText}`, '_blank');
+                }, 100);
+            };
+        })();
     </script>
 </body>
 </html>
