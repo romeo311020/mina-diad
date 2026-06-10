@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإبداع في الرياضيات | أ. مينا دياب</title>
+    <!-- خط Cairo المميز من جوجل -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --accent: #ff007f;
+            --bg-dark: #0b0f19;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* الخلفية المضيئة الخلفية لجمال التصميم */
+        .bg-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            filter: blur(150px);
+            opacity: 0.2;
+            z-index: 0;
+            top: 10%;
+            right: 10%;
+        }
+
+        .main-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* صورة المدرس الاحترافية */
+        .profile-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 25px;
+        }
+
+        .profile-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 50%;
+            animation: rotateGlow 6s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateGlow {
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-dark);
+            background: #1e293b;
+        }
+
+        /* النصوص */
+        .title {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(to left, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+        }
+
+        /* صندوق الإعلان */
+        .announcement-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .announcement-box p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #cbd5e1;
+        }
+
+        .announcement-box .highlight {
+            color: #fff;
+            font-weight: 700;
+            display: block;
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .announcement-box .date-range {
+            color: var(--accent);
+            font-weight: 900;
+        }
+
+        /* العداد التنازلي */
+        .timer-title {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .time-segment {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-width: 65px;
+            padding: 10px;
+            border-radius: 14px;
+        }
+
+        .time-num {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .time-label {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        /* الأزرار الذكية التفاعلية */
+        .links-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-radius: 18px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn i:last-child {
+            font-size: 14px;
+            opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn div {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .action-btn div i {
+            font-size: 20px;
+        }
+
+        /* ألوان وهوفر الأزرار */
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #1ea952, #147a3a);
+        }
+        .btn-whatsapp:hover {
+            box-shadow: 0 0 25px rgba(30, 169, 82, 0.5);
+        }
+
+        .btn-app {
+            background: linear-gradient(135deg, #df8300, #b56500);
+        }
+        .btn-app:hover {
+            box-shadow: 0 0 25px rgba(223, 131, 0, 0.5);
+        }
+
+        .btn-youtube {
+            background: linear-gradient(135deg, #e50914, #b20710);
+        }
+        .btn-youtube:hover {
+            box-shadow: 0 0 25px rgba(229, 9, 20, 0.5);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .action-btn:hover i:last-child {
+            transform: translateX(-5px);
+            opacity: 1;
+        }
+
+        /* حقوق التصميم الخفية في الأسفل بشكل شيك */
+        .footer-credit {
+            margin-top: 30px;
+            font-size: 11px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="main-card">
+        <!-- الصورة الشخصية -->
+        <div class="profile-wrapper">
+            <img src="https://i.postimg.cc/cHpRVyTv/1759964417320.png" alt="أ/ مينا دياب" class="profile-img">
+        </div>
+
+        <!-- العناوين -->
+        <h1 class="title">الإبداع في الرياضيات</h1>
+        <h2 class="subtitle">أ/ مينا دياب</h2>
+
+        <!-- تفاصيل الحجز -->
+        <div class="announcement-box">
+            <p>يعلن الأستاذ مينا دياب عن فتح باب الحجز والاشتراك <span class="highlight">للمرحلتين <span style="color: var(--primary)">الإعدادية</span> و <span style="color: var(--primary)">الثانوية</span></span></p>
+            <span class="highlight">الاشتراك متاح لفترة محدودة جداً:</span>
+            <span class="highlight date-range">من 1 / 7 حتي 10 / 7</span>
+        </div>
+
+        <!-- العداد التنازلي الشيك -->
+        <div class="timer-title">متبقي على إغلاق باب الحجز</div>
+        <div class="countdown-container" id="countdown">
+            <div class="time-segment">
+                <span class="time-num" id="days">00</span>
+                <span class="time-label">أيام</span>
+            </div>
+            <div class="time-segment">
+                <span class="time-num" id="hours">00</span>
+                <span class="time-label">ساعة</span>
+            </div>
+            <div class="time-segment">
+                <span class="time-num" id="minutes">00</span>
+                <span class="time-label">دقيقة</span>
+            </div>
+            <div class="time-segment">
+                <span class="time-num" id="seconds">00</span>
+                <span class="time-label">ثانية</span>
+            </div>
+        </div>
+
+        <!-- مجموعة الأزرار والروابط -->
+        <div class="links-group">
+            <!-- زر الواتساب -->
+            <a href="https://wa.me/201035148166?text=%D8%A7%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%AD%D8%AC%D8%B2%20%D9%85%D8%B9%20%D8%A7%D9%84%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20%D9%85%D9%8A%D9%85%D8%A7%20%D8%AF%D9%8A%D8%A7%D8%A8" target="_blank" class="action-btn btn-whatsapp">
+                <div>
+                    <i class="fab fa-whatsapp"></i>
+                    <span>احجز الآن عبر واتساب</span>
+                </div>
+                <i class="fas fa-chevron-left"></i>
+            </a>
+
+            <!-- زر التطبيق -->
+            <a href="https://play.google.com/store/apps/details?id=com.mickode.elebdaa" target="_blank" class="action-btn btn-app">
+                <div>
+                    <i class="fab fa-google-play"></i>
+                    <span>تنزيل تطبيق الإبداع الرسمي</span>
+                </div>
+                <i class="fas fa-chevron-left"></i>
+            </a>
+
+            <!-- زر اليوتيوب -->
+            <a href="https://youtube.com/channel/UCggCfYjV25vor3RPTmo1wZA?si=dZ_OPl4A8trc2wZ5" target="_blank" class="action-btn btn-youtube">
+                <div>
+                    <i class="fab fa-youtube"></i>
+                    <span>تابعنا على قناة اليوتيوب</span>
+                </div>
+                <i class="fas fa-chevron-left"></i>
+            </a>
+        </div>
+
+        <!-- الفوتر السري الشيك بتاعك -->
+        <div class="footer-credit">
+            &copy; 2026 جميع الحقوق محفوظة لمنصة الإبداع
+        </div>
+    </div>
+
+    <!-- كود العداد التنازلي التفاعلي -->
+    <script>
+        // تحديد تاريخ نهاية الحجز (10 يوليو 2026)
+        const targetDate = new Date("July 10, 2026 23:59:59").getTime();
+
+        const countdownFunction = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // حساب الأيام والساعات والدقائق والثواني
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // عرض النتيجة في العناصر المحددة مع إضافة صفر لو الرقم أقل من 10
+            document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+
+            // لو الوقت خلص
+            if (distance < 0) {
+                clearInterval(countdownFunction);
+                document.getElementById("countdown").innerHTML = "<span style='color: var(--accent); font-weight: bold; font-size: 16px;'>عذراً، إنتهت فترة الحجز الرسمية!</span>";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
