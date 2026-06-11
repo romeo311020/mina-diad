@@ -863,7 +863,8 @@
     <header id="mainHeader">
         <a href="#" class="logo">
             <i class="fa-solid fa-calculator"></i>
-            <span>M. mina diab</span>
+            <span>
+            M. mina diab</span>
         </a>
         <button class="menu-btn" onclick="toggleSidebar(true)">
             <i class="fa-solid fa-bars-staggered"></i>
@@ -889,9 +890,9 @@
     </nav>
 
     <section class="hero">
-        <div class="hero-badge">الابداع ف الرياضيات</div>
+        <div class="hero-badge">الابداع في الرياضيات</div>
         <h1>دي مش رياضة دي مزيكا 🎻</h1>
-        <p>ابدأ رحلة التميز والعبقرية الآن مع أقوى الشروحات والحلول المبسطة للمناهج الدراسية، مصممة خصيصاً لمساعدتك على التفوق.</p>
+        <p>يعلن أ/ مينا دياب عن بدء الحجز للمرحلة الإعدادية والثانوية ابتداءً من يوم ١ / ٧ حتى يوم ١٠ / ٧ الحجز عن طريق موقعنا الإلكتروني</p>
 
         <div class="countdown-container glass-card">
             <div class="countdown-title"><i class="fa-regular fa-clock"></i> ينتهي الحجز والتسجيل المبكر خلال:</div>
@@ -902,7 +903,7 @@
                 </div>
                 <div class="countdown-item">
                     <div class="countdown-time" id="cdHours">00</div>
-                    <div class="countdown-label">ساعات</div>
+                    <div class="countdown-label">الساعات</div>
                 </div>
                 <div class="countdown-item">
                     <div class="countdown-time" id="cdMinutes">00</div>
@@ -1018,7 +1019,7 @@
         </div>
     </div>
 
-    <a href="https://wa.me/201275305035" class="whatsapp-float" target="_blank" title="تواصل عبر الواتساب">
+    <a href="https://wa.me/201035148166" class="whatsapp-float" target="_blank" title="تواصل عبر الواتساب">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
@@ -1052,19 +1053,31 @@
                 { url: "https://youtu.be/yM7pdvzNxUY", title: "مفهوم النهايات والاتصال - تفاضل" },
                 { url: "https://youtu.be/Z10u81GIwa0", title: "الدوال الحقيقية ورسم المنحنيات - جبر" }
             ],
+            "third_sec": [
+                { url: "https://youtu.be/yM7pdvzNxUY", title: "محاضرة تمهيدية لطلاب الصف الثالث الثانوي" }
+            ],
+            "first_prep": [
+                { url: "https://youtu.be/tP7wDaFuKsI", title: "مراجعة تأسيسية لطلاب الصف الأول الإعدادي" }
+            ],
+            "second_prep": [
+                { url: "https://youtu.be/tP7wDaFuKsI", title: "مراجعة تأسيسية لطلاب الصف الثاني الإعدادي" }
+            ],
             "third_prep": [
                 { url: "https://youtu.be/tP7wDaFuKsI", title: "حاصل الضرب الديكارتي - المحاضرة التمهيدية" },
                 { url: "https://youtu.be/n-i8o2kPpRQ", title: "العلاقات والدوال المتقدمة" },
-                { url: "https://youtu.be/-Kk5DY44bHo", title: "حساب المثلثات: النسب المثلثية الأساسية" },
+                { url: "-Kk5DY44bHo", title: "حساب المثلثات: النسب المثلثية الأساسية" },
                 { url: "https://youtu.be/5CDsd6mvHWI", title: "الهندسة التحليلية: البعد بين نقطتين" }
             ]
         };
 
         // مخرجات نصوص الصفوف لعرضها للمستخدم بشكل احترافي
         const gradeLabels = {
+            "first_prep": "الأول الإعدادي",
+            "second_prep": "الثاني الإعدادي",
             "third_prep": "الثالث الإعدادي",
             "first_sec": "الأول الثانوي",
-            "second_sec": "الثاني الثانوي"
+            "second_sec": "الثاني الثانوي",
+            "third_sec": "الثالث الثانوي"
         };
 
         /* تأثير سكرول الهيدر */
@@ -1086,7 +1099,7 @@
                 loader.style.visibility = 'hidden';
             }, 1200);
 
-            // تشغيل العداد التنازلي التفاعلي المتقدم (10 أيام من وقت الفتح الحالي)
+            // تشغيل العداد التنازلي المحدث التفاعلي المتقدم لينتهي تماماً يوم 10/7
             initCountdown();
 
             // فحص حالة الحجز الحالية وتخصيص تجربة العرض
@@ -1106,7 +1119,7 @@
             }
         }
 
-        /* تحديث قائمة الصفوف بناءً على المرحلة المحددة بالاستمارة */
+        /* تحديث قائمة الصفوف بناءً على المرحلة المحددة بالاستمارة وإضافة جميع الصفوف كاملة */
         function updateGradesDropdown() {
             const level = document.getElementById('educationalLevel').value;
             const gradeSelect = document.getElementById('studentGrade');
@@ -1114,10 +1127,20 @@
             gradeSelect.innerHTML = '';
             
             if (level === 'prep') {
-                const opt = document.createElement('option');
-                opt.value = 'third_prep';
-                opt.textContent = 'الصف الثالث الإعدادي';
-                gradeSelect.appendChild(opt);
+                const opt1 = document.createElement('option');
+                opt1.value = 'first_prep';
+                opt1.textContent = 'الصف الأول الإعدادي';
+                gradeSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = 'second_prep';
+                opt2.textContent = 'الصف الثاني الإعدادي';
+                gradeSelect.appendChild(opt2);
+
+                const opt3 = document.createElement('option');
+                opt3.value = 'third_prep';
+                opt3.textContent = 'الصف الثالث الإعدادي';
+                gradeSelect.appendChild(opt3);
             } else if (level === 'sec') {
                 const opt1 = document.createElement('option');
                 opt1.value = 'first_sec';
@@ -1128,6 +1151,11 @@
                 opt2.value = 'second_sec';
                 opt2.textContent = 'الصف الثاني الثانوي';
                 gradeSelect.appendChild(opt2);
+
+                const opt3 = document.createElement('option');
+                opt3.value = 'third_sec';
+                opt3.textContent = 'الصف الثالث الثانوي';
+                gradeSelect.appendChild(opt3);
             }
         }
 
@@ -1150,20 +1178,24 @@
             }
         }
 
-        /* تنفيذ وعملية الحجز وتخزينها */
+        /* تنفيذ وعملية الحجز وتحويل كافة البيانات بدقة كاملة إلى الواتساب مباشر */
         function executeBooking(event) {
             event.preventDefault();
             
             const name = document.getElementById('studentName').value.trim();
-            const grade = document.getElementById('studentGrade').value;
-            const type = document.querySelector('input[name="bookingType"]:checked').value;
+            const gradeKey = document.getElementById('studentGrade').value;
+            const typeValue = document.querySelector('input[name="bookingType"]:checked').value;
             const sPhone = document.getElementById('studentPhone').value;
             const pPhone = document.getElementById('parentPhone').value;
 
+            // استخراج اسم الصف بالعربية مباشرة بدلاً من الرموز البرمجية
+            const gradeText = gradeLabels[gradeKey] || "غير محدد";
+            const typeText = typeValue === 'center' ? 'داخل السنتر' : 'أونلاين بالمنصة';
+
             const studentObject = {
                 name: name,
-                grade: grade,
-                type: type,
+                grade: gradeKey,
+                type: typeValue,
                 studentPhone: sPhone,
                 parentPhone: pPhone,
                 timestamp: new Date().getTime()
@@ -1176,6 +1208,24 @@
             
             // إعادة بناء واجهة المستخدم وتحديث محتوى الفيديوهات
             renderPlatformState();
+
+            // ==========================================
+            // إرسال الاستمارة وتفاصيل البيانات للواتساب فوراً
+            // ==========================================
+            const whatsappNumber = "201035148166";
+            const messageText = `*استمارة حجز إلكتروني جديدة* 🎓\n\n` +
+                                `• *اسم الطالب:* ${name}\n` +
+                                `• *الصف الدراسي:* ${gradeText}\n` +
+                                `• *نوع الحجز:* ${typeText}\n` +
+                                `• *رقم هاتف الطالب:* ${sPhone}\n` +
+                                `• *رقم ولي الأمر:* ${pPhone}\n\n` +
+                                `_تم الإرسال تلقائياً عبر منصة مستر رياضيات_ ✨`;
+
+            const encodedMessage = encodeURIComponent(messageText);
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+            
+            // فتح المحادثة الفورية لإرسال البيانات بالصيغة المطلوبة
+            window.open(whatsappUrl, '_blank');
             
             // إظهار تنبيه ترحيبي خلاب باسم الطالب
             setTimeout(() => {
@@ -1350,505 +1400,116 @@
             showToast("تطبيق الأندرويد قريبًا!", "نعمل حالياً على إطلاق التطبيق الخاص بمستر رياضيات على Google Play.", "success");
         }
 
-        /* بناء العداد التنازلي التفاعلي */
+        /* بناء العداد التنازلي التفاعلي المطور لينتهي تماماً يوم 10/7 */
         function initCountdown() {
-            // تحديد وقت انتهاء الحجز (10 أيام من وقت فتح الطالب الفعلي للموقع)
-            let targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 10);
+            // تحديد وقت انتهاء الحجز (يوم 10 يوليو 2026)
+            const targetDate = new Date("July 10, 2026 23:59:59").getTime();
             
             function updateTimer() {
                 const now = new Date().getTime();
-                const difference = targetDate.getTime() - now;
+                const difference = targetDate - now;
                 
                 if (difference <= 0) {
-                    clearInterval(intervalId);
+                    document.getElementById('cdDays').textContent = "00";
+                    document.getElementById('cdHours').textContent = "00";
+                    document.getElementById('cdMinutes').textContent = "00";
+                    document.getElementById('cdSeconds').textContent = "00";
+                    clearInterval(timerInterval);
                     return;
                 }
-                
+
                 const days = Math.floor(difference / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                
-                document.getElementById('cdDays').textContent = days < 10 ? '0' + days : days;
-                document.getElementById('cdHours').textContent = hours < 10 ? '0' + hours : hours;
-                document.getElementById('cdMinutes').textContent = minutes < 10 ? '0' + minutes : minutes;
-                document.getElementById('cdSeconds').textContent = seconds < 10 ? '0' + seconds : seconds;
+
+                document.getElementById('cdDays').textContent = days < 10 ? "0" + days : days;
+                document.getElementById('cdHours').textContent = hours < 10 ? "0" + hours : hours;
+                document.getElementById('cdMinutes').textContent = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById('cdSeconds').textContent = seconds < 10 ? "0" + seconds : seconds;
             }
-            
+
             updateTimer();
-            const intervalId = setInterval(updateTimer, 1000);
+            const timerInterval = setInterval(updateTimer, 1000);
         }
-    </script>
+    /* ========================================================
+   التعديلات النهائية المضمونة 100% - تصميم: روماني جرجس
+   ======================================================== */
 
-    <style>
-        /* إضافة ستايل كارت المعلم الفاخر والجملة الإعلانية */
-        .teacher-announcement-card {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            max-width: 850px;
-            width: 90%;
-            margin: -30px auto 40px auto;
-            padding: 25px;
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.05);
-            z-index: 10;
-            position: relative;
+// 1. رابط تنزيل التطبيق المباشر
+function openDownloadApp() {
+    toggleSidebar(false);
+    window.open("https://play.google.com/store/apps/details?id=com.mickode.elebdaa", "_blank");
+}
+
+// 2. دالة تسجيل دخول جديد (تمسح الحساب القديم وتفتح الاستمارة فوراً)
+function resetAndNewRegister() {
+    if(confirm("هل أنت متأكد أنك تريد تسجيل دخول جديد ومسح بيانات الحجز الحالية؟")) {
+        localStorage.removeItem('registeredStudent');
+        toggleSidebar(false);
+        renderPlatformState(); // تحديث الواجهة
+        openModal('bookingModal'); // فتح الاستمارة فوراً
+        showToast("جاهز للتسجيل", "تم مسح الحساب السابق، يمكنك كتابة البيانات الجديدة الآن.", "success");
+    }
+}
+
+// 3. حقن التعديلات، إصلاح التمرير، وإضافة السوشيال ميديا والتوقيع الفاخر
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // أولاً: إصلاح مشكلة عدم النزول والطلوع في قائمة التسجيل على الموبايل
+    const modalWrapper = document.querySelector('#bookingModal .modal-wrapper');
+    if (modalWrapper) {
+        modalWrapper.style.maxHeight = '90vh';
+        modalWrapper.style.overflowY = 'auto';
+        modalWrapper.style.webkitOverflowScrolling = 'touch'; // نعومة السكرول على الآيفون
+    }
+
+    // ثانياً: إضافة زر "تسجيل جديد" داخل بطاقة الطالب بالسايدبار (لو كان مسجل)
+    const originalRender = window.renderPlatformState;
+    window.renderPlatformState = function() {
+        // تشغيل الدالة الأصلية أولاً لبناء الواجهة
+        if (typeof originalRender === 'function') originalRender();
+        
+        const userCard = document.getElementById('sidebarUserCard');
+        const studentData = localStorage.getItem('registeredStudent');
+        
+        if (studentData && userCard) {
+            // إذا كان مسجل، نضع زر حساب جديد أسفل بطاقته في السايدبار مباشرة
+            const newAccBtn = document.createElement('button');
+            newAccBtn.type = 'button';
+            newAccBtn.onclick = resetAndNewRegister;
+            newAccBtn.className = 'btn';
+            newAccBtn.style.cssText = "width: 100%; justify-content: center; margin-top: 12px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 10px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer;";
+            newAccBtn.innerHTML = `<i class="fa-solid fa-user-plus"></i> تسجيل دخول جديد (حساب آخر)`;
+            userCard.querySelector('.user-profile-card').appendChild(newAccBtn);
         }
-        .teacher-img-wrapper {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .teacher-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .announcement-content h3 {
-            color: var(--primary);
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        .announcement-content p {
-            color: var(--text-main);
-            font-size: 1.05rem;
-            font-weight: 600;
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
+    };
+    
+    // إعادة تشغيل الفحص لضمان ظهور الزر في السايدبار فوراً
+    renderPlatformState();
 
-        /* تصغير حجم نافذة الحجز وجعلها فائقة السرعة والاحترافية */
-        #bookingModal .modal-wrapper {
-            max-width: 420px;
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(56, 189, 248, 0.1);
-        }
-        #bookingModal .modal-title {
-            font-size: 1.35rem;
-        }
-        #bookingModal .modal-subtitle {
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-        }
-        #bookingModal .form-group {
-            margin-bottom: 12px;
-        }
-        #bookingModal .form-control {
-            padding: 10px 14px;
-            font-size: 0.9rem;
-        }
-        #bookingModal .booking-type-toggle {
-            margin-bottom: 15px;
-            gap: 10px;
-        }
-        #bookingModal .type-label {
-            padding: 10px;
-            font-size: 0.85rem;
-        }
+    // ثالثاً: إنشاء الفوتر العائم بالأسفل تماماً ليحتوي على (السوشيال ميديا + التوقيع البراند ROMEO)
+    const globalFooter = document.createElement('footer');
+    globalFooter.style.cssText = "margin-top: 50px; padding: 30px 20px; text-align: center; border-top: 1px solid var(--glass-border); background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(10px);";
+    
+    globalFooter.innerHTML = `
+        <!-- أزرار وسائل التواصل الاجتماعي -->
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; font-weight: 600;">تابعنا على منصاتنا الرسمية</p>
+        <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 25px;">
+            <a href="https://youtube.com/channel/UCggCfYjV25vor3RPTmo1wZA?si=yyMbdi-MDJVWAYMa" target="_blank" style="color: #ef4444; font-size: 1.8rem; transition: transform 0.3s; display: inline-block;"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.facebook.com/share/18trfZ3HLd/" target="_blank" style="color: #3b82f6; font-size: 1.8rem; transition: transform 0.3s; display: inline-block;"><i class="fa-brands fa-facebook"></i></a>
+        </div>
 
-        /* إضافة أزرار السوشيال ميديا الإضافية في السايدبار */
-        .sidebar-social-links {
-            margin-top: auto;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
-        }
-        .social-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .social-btn.fb:hover {
-            background: #1877f2;
-            border-color: #1877f2;
-            box-shadow: 0 0 15px rgba(24, 119, 242, 0.5);
-        }
-        .social-btn.platform:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #0f172a;
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        /* التنسيقات الاحترافية الجديدة لداخل نافذة التسجيل */
-        .modal-teacher-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .modal-teacher-avatar {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-        .modal-teacher-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .modal-teacher-slogan {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 0.5px;
-            background: linear-gradient(to left, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* ستايل أيقونة اليوتيوب المضيئة في السايدبار */
-        .social-btn.yt:hover {
-            background: #ff0000;
-            border-color: #ff0000;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
-            color: #fff;
-        }
-
-        /* ستايل لوحة "سيتم الإضافة قريباً" الاحترافية */
-        .coming-soon-state {
-            padding: 50px 30px;
-            text-align: center;
-            max-width: 550px;
-            margin: 30px auto;
-        }
-        .coming-soon-icon {
-            width: 75px;
-            height: 75px;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            color: var(--primary);
-            margin: 0 auto 20px;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-            animation: floatAnimation 3s ease-in-out infinite;
-        }
-        @keyframes floatAnimation {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @media (max-width: 768px) {
-            .teacher-announcement-card {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px;
-                margin-top: -10px;
-            }
-            .teacher-img-wrapper {
-                width: 90px;
-                height: 90px;
-            }
-            .announcement-content p {
-                font-size: 0.95rem;
-            }
-        }
-    </style>
-
-    <script>
-        // دالة إضافية ذاتية التشغيل لتنفيذ التعديلات والتحكم الفوقي بالـ DOM بأمان دون تعديل الأكواد السابقة
-        (function() {
-            // تمديد قاعدة الفيديوهات المتاحة لتشمل الصفوف الستة كاملة
-            window.playlistDatabase = {
-                "first_prep": [], // لا توجد محاضرات حالياً
-                "second_prep": [], // لا توجد محاضرات حالياً
-                "third_prep": [
-                    { url: "https://youtu.be/tP7wDaFuKsI", title: "حاصل الضرب الديكارتي - المحاضرة التمهيدية" },
-                    { url: "https://youtu.be/n-i8o2kPpRQ", title: "العلاقات والدوال المتقدمة" },
-                    { url: "https://youtu.be/-Kk5DY44bHo", title: "حساب المثلثات: النسب المثلثية الأساسية" },
-                    { url: "https://youtu.be/5CDsd6mvHWI", title: "الهندسة التحليلية: البعد بين نقطتين" }
-                ],
-                "first_sec": [
-                    { url: "https://youtu.be/J78j_SGXtnw", title: "مقدمة في الجبر والمصفوفات - المحاضرة الأولى" },
-                    { url: "https://youtu.be/v3wuOJ5j7gk", title: "تحديد نوع جذري المعادلة التربيعية" },
-                    { url: "https://youtu.be/xqo6XxwrN9I", title: "العلاقة بين جذري معادلة الدرجة الثانية" },
-                    { url: "https://youtu.be/tCjIXATymyY", title: "حساب المثلثات: الزاوية الموجهة" },
-                    { url: "https://youtu.be/wpq0-3g0GfA", title: "الوحدات القياسية والدائرية لقياس الزوايا" },
-                    { url: "https://youtu.be/MR29APJJ2tc", title: "الهندسة المستوية: تشابه المثلثات" },
-                    { url: "https://youtu.be/9VcoWJubZ5w", title: "ح حالات تشابه المثلثات وتطبيقاتها" },
-                    { url: "https://youtu.be/pnPI-sbgmTM", title: "مبرهنة تاليس في الهندسة" },
-                    { url: "https://youtu.be/xioLBu3VYds", title: "مراجعة وحل اختبار الجبر الشامل" }
-                ],
-                "second_sec": [
-                    { url: "https://youtu.be/yM7pdvzNxUY", title: "مفهوم النهايات والاتصال - تفاضل" },
-                    { url: "https://youtu.be/Z10u81GIwa0", title: "الدوال الحقيقية ورسم المنحنيات - جبر" }
-                ],
-                "third_sec": [] // لا توجد محاضرات حالياً
-            };
-
-            // مخرجات نصوص الصفوف لعرضها للمستخدم بشكل احترافي شامل لستة صفوف كاملة
-            window.gradeLabels = {
-                "first_prep": "الأول الإعدادي",
-                "second_prep": "الثاني الإعدادي",
-                "third_prep": "الثالث الإعدادي",
-                "first_sec": "الأول الثانوي",
-                "second_sec": "الثاني الثانوي",
-                "third_sec": "الثالث الثانوي"
-            };
-
-            // 1. إضافة كارت المعلم فوراً تحت العداد التنازلي في قسم الـ Hero
-            const countdownContainer = document.querySelector('.countdown-container');
-            if (countdownContainer) {
-                const teacherCard = document.createElement('div');
-                teacherCard.className = 'teacher-announcement-card glass-card';
-                teacherCard.innerHTML = `
-                    <div class="teacher-img-wrapper">
-                        <img src="https://i.postimg.cc/cHpRVyTv/mina_diab.png" alt="أ/ مينا دياب">
-                    </div>
-                    <div class="announcement-content">
-                        <h3>الإعلان الرسمي للمنصة</h3>
-                        <p>يعلن أ/ مينا دياب عن بدء الحجز للمرحلة الإعدادية والثانوية ابتداءً من يوم ١ / ٧ حتي يوم ١٠ / ٧. الحجز عن طريق الواتس أب فقط: 01035148166</p>
-                    </div>
-                `;
-                countdownContainer.parentNode.insertBefore(teacherCard, countdownContainer.nextSibling);
-            }
-
-            // 2. تحديث روابط أزرار السايدبار لزر التطبيق Pro الجديد وزر التواصل
-            window.openDownloadApp = function() {
-                toggleSidebar(false);
-                window.open('https://play.google.com/store/apps/details?id=com.mickode.elebdaa', '_blank');
-            };
-
-            // الغاء الفيسبوك واضافة زر اليوتيوب بالرابط الجديد المطلوب في اسفل السايدبار
-            const sidebarMenu = document.querySelector('.sidebar');
-            if (sidebarMenu) {
-                // إزالة أي قائمة سابقة إذا وجدت لمنع التكرار
-                const oldSocials = sidebarMenu.querySelector('.sidebar-social-links');
-                if (oldSocials) oldSocials.remove();
-
-                const socialContainer = document.createElement('div');
-                socialContainer.className = 'sidebar-social-links';
-                socialContainer.innerHTML = `
-                    <a href="https://youtube.com/channel/UCggCfYjV25vor3RPTmo1wZA?si=7tF5CPk3se_XyMp0" target="_blank" class="social-btn yt" title="تابعنا على يوتيوب">
-                        <i class="fa-brands fa-youtube"></i>
-                    </a>
-                    <a href="#" class="social-btn platform" onclick="event.preventDefault(); showToast('المنصة التعليمية', 'تم ربط المنصة الرسمية بنجاح وهي تعمل الآن.', 'success');" title="المنصة الرئيسية">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </a>
-                `;
-                sidebarMenu.appendChild(socialContainer);
-            }
-
-            // 3. تعديل سلوك زر الواتساب العائم ليتجه للرقم الجديد المطلـوب
-            const whatsappFloatBtn = document.querySelector('.whatsapp-float');
-            if (whatsappFloatBtn) {
-                whatsappFloatBtn.href = "https://wa.me/201035148166";
-            }
-
-            // 4. دالة تحديث قائمة الصفوف بناءً على المرحلة لتشمل الستة صفوف كاملة
-            window.updateGradesDropdown = function() {
-                const level = document.getElementById('educationalLevel').value;
-                const gradeSelect = document.getElementById('studentGrade');
-                
-                gradeSelect.innerHTML = '';
-                
-                if (level === 'prep') {
-                    const opt1 = document.createElement('option');
-                    opt1.value = 'first_prep';
-                    opt1.textContent = 'الصف الأول الإعدادي';
-                    gradeSelect.appendChild(opt1);
-
-                    const opt2 = document.createElement('option');
-                    opt2.value = 'second_prep';
-                    opt2.textContent = 'الصف الثاني الإعدادي';
-                    gradeSelect.appendChild(opt2);
-
-                    const opt3 = document.createElement('option');
-                    opt3.value = 'third_prep';
-                    opt3.textContent = 'الصف الثالث الإعدادي';
-                    gradeSelect.appendChild(opt3);
-                } else if (level === 'sec') {
-                    const opt1 = document.createElement('option');
-                    opt1.value = 'first_sec';
-                    opt1.textContent = 'الصف الأول الثانوي';
-                    gradeSelect.appendChild(opt1);
-
-                    const opt2 = document.createElement('option');
-                    opt2.value = 'second_sec';
-                    opt2.textContent = 'الصف الثاني الثانوي';
-                    gradeSelect.appendChild(opt2);
-
-                    const opt3 = document.createElement('option');
-                    opt3.value = 'third_sec';
-                    opt3.textContent = 'الصف الثالث الثانوي';
-                    gradeSelect.appendChild(opt3);
-                }
-            };
-
-            // 5. حقن صورة المدرس والشعار الرسمي (الإبداع في الرياضيات) داخل واجهة التسجيل Modal
-            const bookingModalWrapper = document.querySelector('#bookingModal .modal-wrapper');
-            if (bookingModalWrapper) {
-                // فحص عدم التكرار
-                const existingHeader = bookingModalWrapper.querySelector('.modal-teacher-header');
-                if (!existingHeader) {
-                    const teacherHeader = document.createElement('div');
-                    teacherHeader.className = 'modal-teacher-header';
-                    teacherHeader.innerHTML = `
-                        <div class="modal-teacher-avatar">
-                            <img src="https://i.postimg.cc/cHpRVyTv/mina_diab.png" alt="أ/ مينا دياب">
-                        </div>
-                        <div class="modal-teacher-slogan">الإبداع في الرياضيات</div>
-                    `;
-                    // إدراج هيدر المدرس قبل عنوان الاستمارة الرئيسي مباشرة
-                    const modalTitle = bookingModalWrapper.querySelector('.modal-title');
-                    bookingModalWrapper.insertBefore(teacherHeader, modalTitle);
-                }
-            }
-
-            // 6. نظام حساب الوقت التنازلي الحقيقي والدقيق لغاية 10/7/2026 بدلاً من دالة الـ 10 أيام العشوائية
-            window.initCountdown = function() {
-                const targetTimestamp = new Date("July 10, 2026 00:00:00").getTime();
-                
-                function runRealTimer() {
-                    const nowTimestamp = new Date().getTime();
-                    const remainingTime = targetTimestamp - nowTimestamp;
-                    
-                    if (remainingTime <= 0) {
-                        document.getElementById('cdDays').textContent = "00";
-                        document.getElementById('cdHours').textContent = "00";
-                        document.getElementById('cdMinutes').textContent = "00";
-                        document.getElementById('cdSeconds').textContent = "00";
-                        clearInterval(realTimerIntervalId);
-                        return;
-                    }
-                    
-                    const rDays = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-                    const rHours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const rMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                    const rSeconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-                    
-                    document.getElementById('cdDays').textContent = rDays < 10 ? '0' + rDays : rDays;
-                    document.getElementById('cdHours').textContent = rHours < 10 ? '0' + rHours : rHours;
-                    document.getElementById('cdMinutes').textContent = rMinutes < 10 ? '0' + rMinutes : rMinutes;
-                    document.getElementById('cdSeconds').textContent = rSeconds < 10 ? '0' + rSeconds : rSeconds;
-                }
-                
-                runRealTimer();
-                const realTimerIntervalId = setInterval(runRealTimer, 1000);
-            };
-
-            // 7. تحسين دالة العرض الأساسية لتدعم كتابة "سيتم الإضافة قريباً" في حال خلو المنهج من المحاضرات
-            window.renderActualVideos = function(targetElement, videos, gradeText) {
-                if (!videos || videos.length === 0) {
-                    targetElement.innerHTML = `
-                        <div class="coming-soon-state glass-card">
-                            <div class="coming-soon-icon">
-                                <i class="fa-solid fa-hourglass-half"></i>
-                            </div>
-                            <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-bottom: 8px;">سيتم الإضافة قريباً!</h3>
-                            <p style="color: var(--text-muted); font-size: 0.95rem;">المحاضرات والفيديوهات المجانية الخاصة بصفك الدراسي يتم تحضيرها ورفعها حالياً وسوف تظهر لك هنا تلقائياً فور نزولها.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let gridHTML = '<div class="video-grid">';
-                videos.forEach((video) => {
-                    const videoId = extractYouTubeId(video.url);
-                    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-
-                    gridHTML += `
-                        <div class="video-card glass-card" onclick="openVideoPlayer('${videoId}')">
-                            <div class="thumbnail-container">
-                                <img src="${thumbnailUrl}" class="thumbnail-img" alt="صورة فيديو" loading="lazy">
-                                <div class="play-overlay">
-                                    <div class="play-btn-circle">
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="video-info">
-                                <span class="video-tag">${gradeText}</span>
-                                <div class="video-title" title="${video.title}">${video.title}</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                gridHTML += '</div>';
-                targetElement.innerHTML = gridHTML;
-            };
-
-            // 8. التعديل الفوقي والذكي لاستمارة الحجز لإرسال البيانات للواتساب المخصص تلقائياً لكل طالب على حدة
-            window.executeBooking = function(event) {
-                event.preventDefault();
-                
-                const name = document.getElementById('studentName').value.trim();
-                const gradeValue = document.getElementById('studentGrade').value;
-                const type = document.querySelector('input[name="bookingType"]:checked').value;
-                const sPhone = document.getElementById('studentPhone').value;
-                const pPhone = document.getElementById('parentPhone').value;
-
-                const selectedGradeText = gradeLabels[gradeValue] || "غير محدد";
-                const selectedTypeText = type === 'center' ? 'داخل السنتر' : 'أونلاين بالمنصة';
-
-                const studentObject = {
-                    name: name,
-                    grade: gradeValue,
-                    type: type,
-                    studentPhone: sPhone,
-                    parentPhone: pPhone,
-                    timestamp: new Date().getTime()
-                };
-
-                // تخزين محلي للحفاظ على استقرار كود المنصة الأساسي
-                localStorage.setItem('registeredStudent', JSON.stringify(studentObject));
-                closeModal('bookingModal');
-                renderPlatformState();
-                
-                // صياغة رسالة الواتساب الفاخرة والمنظمة بشكل فائق الاحترافية
-                const whatsappTargetNumber = "201035148166";
-                const baseText = `*استمارة حجز إلكتروني جديدة* 🎓%0A%0A` +
-                                 `• *اسم الطالب:* ${encodeURIComponent(name)}%0A` +
-                                 `• *الصف الدراسي:* ${encodeURIComponent(selectedGradeText)}%0A` +
-                                 `• *نوع الحجز:* ${encodeURIComponent(selectedTypeText)}%0A` +
-                                 `• *رقم هاتف الطالب:* ${encodeURIComponent(sPhone)}%0A` +
-                                 `• *رقم ولي الأمر:* ${encodeURIComponent(pPhone)}%0A%0A` +
-                                 `_تم الإرسال تلقائياً عبر منصة مستر رياضيات_ ✨`;
-
-                // التوجيه الفوري والسريع للواتساب لإرسال بيانات الطالب في رسالة مستقلة
-                setTimeout(() => {
-                    window.open(`https://wa.me/${whatsappTargetNumber}?text=${baseText}`, '_blank');
-                }, 100);
-            };
-
-            // إعادة الفحص الفوري لتطبيق التحديثات المباشرة فوراً بعد حقن الأكواد الفوقية
-            if (typeof renderPlatformState === "function") {
-                renderPlatformState();
-            }
-        })();
-    </script>
+        <!-- التوقيع الفخم المتناسق -->
+        <div style="font-family: 'Cairo', sans-serif; direction: rtl;">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px; letter-spacing: 0.5px;">تصميم: <span style="color: #fff; font-weight: 600;">روماني جرجس | Romany Garges</span></p>
+            <h4 style="font-size: 1.4rem; font-weight: 900; background: linear-gradient(45deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 4px; margin-top: 5px; text-shadow: 0 0 15px rgba(56,189,248,0.3);">ROMEO</h4>
+        </div>
+    `;
+    
+    // إدراج الفوتر في نهاية جسم الصفحة ليظهر دائماً بشكل رائع
+    document.body.appendChild(globalFooter);
+});
+</script>
 </body>
 </html>
