@@ -1,17 +1,30 @@
-# Mr. Mina Diab — Website Starter
+# Mr. Mina Diab — Multi-page Website
 
-Responsive bilingual (Egyptian Arabic / English) teacher website with a white and gold identity, animated math-themed background, responsive navigation, stage cards, features, and contact form.
+واجهة تعليمية عربية/إنجليزية بهوية بيضاء وذهبية، متجاوبة مع الموبايل، مع صفحات مستقلة، وحركات رياضية، وصفحة تواصل بأيقونات واتساب وإنستجرام، وسؤال تدريبي تفاعلي.
 
-## Files
-- `index.html` — website content and sections
-- `styles.css` — visual design, responsive layout, and animations
-- `script.js` — language toggle, mobile menu, reveal animations, WhatsApp form
+## صورة المستر
+1. افتح مجلد `images`.
+2. ضع صورة المستر داخله وسمّها بالضبط `mina-diab.jpg`.
+3. الصيغ الموصى بها: JPG أو JPEG، ويفضل صورة رأسية واضحة. لا تغيّر الاسم إلا إذا عدّلت مسار الصورة في HTML.
 
-## Run
-Open `index.html` in a browser, or use VS Code + Live Server.
+## الصفحات
+- `index.html` — الرئيسية
+- `about.html` — عن المستر
+- `levels.html` — المراحل الدراسية
+- `library.html` — المكتبة التعليمية (جاهزة لإضافة الملفات والروابط الحقيقية)
+- `practice.html` — التدريبات (تحتوي سؤالًا تجريبيًا تفاعليًا)
+- `contact.html` — التواصل واستمارة واتساب
+- `styles.css` — التصميم والاستجابة للموبايل
+- `script.js` — اللغة والقائمة والحركات والنموذج والتدريب
 
-## Contact form behavior
-The form validates required fields and opens WhatsApp with a prefilled message to `+20 10 35148166`. The user reviews and sends the message. This static version does not save form submissions in a database.
+## التشغيل
+افتح `index.html` أو استخدم VS Code مع إضافة Live Server.
 
-## Important
-This is the polished front-end starting point, not yet the complete authenticated learning platform. Student accounts, protected lessons/files, quizzes with saved results, and a teacher admin dashboard require a backend such as Supabase plus correctly configured database access policies (RLS). Never place a Supabase service-role key in front-end JavaScript.
+## التواصل
+نموذج التواصل يفتح واتساب برسالة جاهزة للمراجعة والإرسال؛ لا يخزن البيانات على الموقع.
+
+## ملاحظة عن التكبير
+تم ضبط viewport وإضافة محاولة لمنع pinch/double-tap zoom، لكن بعض المتصفحات قد تتجاهل ذلك لأسباب تتعلق بإمكانية الوصول.
+
+## ما لم يُنفّذ بعد
+هذه نسخة واجهة أمامية. تسجيل حسابات الطلاب، حماية المحتوى، حفظ نتائج الاختبارات ولوحة تحكم المستر تحتاج Backend مثل Supabase مع سياسات وصول آمنة (RLS). لا تضع أبدًا service-role key في ملفات الواجهة الأمامية.
