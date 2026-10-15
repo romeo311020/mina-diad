@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fffdf8"><title>حساب الطالب | مستر مينا دياب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.auth-wrap{max-width:520px;margin:50px auto;padding:0 18px}.auth-card{background:#fff;border:1px solid #e8e2d7;border-radius:22px;padding:28px;box-shadow:0 16px 45px #392a1010}.auth-switch{display:flex;gap:8px;margin:18px 0}.auth-switch button{flex:1;border:1px solid #e8e2d7;border-radius:12px;padding:12px;background:#faf7f0;color:#292723;font:inherit;font-weight:800;cursor:pointer}.auth-switch button.active{background:#b58a3a;color:white;border-color:#b58a3a}.auth-card label{display:block;font-size:13px;font-weight:800;margin:13px 0 6px}.auth-card input,.auth-card select{width:100%;padding:13px;border:1px solid #e5dfd4;border-radius:11px;background:white;font:inherit;box-sizing:border-box}.auth-submit{width:100%;border:0;border-radius:12px;padding:13px;margin-top:18px;background:#b58a3a;color:white;font:inherit;font-weight:900;cursor:pointer}.auth-message{margin-top:14px;padding:12px;border-radius:10px;background:#f8f3e9;font-size:13px;line-height:1.8;white-space:pre-wrap}.auth-message.error{background:#fff0ef;color:#b42318}.auth-message.success{background:#edf9f1;color:#18794e}.auth-note{font-size:12px;color:#77746d;line-height:1.9;margin-top:15px}
+</style>
+</head>
+<body data-title-ar="حساب الطالب | مستر مينا دياب" data-title-en="Student Account | Mr. Mina Diab">
+<header class="header"><a class="brand" href="index.html"><span class="logo">M<sup>2</sup></span><span><b>MR. MINA DIAB</b><small>الإبداع في الرياضيات</small></span></a><a class="btn gold small" href="index.html">العودة للموقع</a></header>
+<main class="auth-wrap">
+<section class="auth-card">
+ <span class="kicker">STUDENT ACCOUNT</span><h1 id="formTitle" style="margin:8px 0">حساب الطالب</h1>
+ <p style="color:#77746d;line-height:1.8;margin-top:0">سجّل برقم هاتفك وكلمة المرور لمتابعة محتوى المنصة.</p>
+ <div class="auth-switch"><button type="button" id="loginMode" class="active">تسجيل الدخول</button><button type="button" id="signupMode">إنشاء حساب</button></div>
+ <form id="authForm">
+  <div id="nameGroup" class="hidden"><label for="fullName">اسم الطالب بالكامل</label><input id="fullName" maxlength="120" autocomplete="name" placeholder="اكتب اسمك"></div>
+  <label for="email">البريد الإلكتروني</label><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="student@example.com" required>
+  <label for="password">كلمة المرور</label><input id="password" type="password" minlength="8" autocomplete="current-password" required placeholder="8 أحرف أو أرقام على الأقل">
+  <div id="gradeGroup" class="hidden"><label for="grade">المرحلة الدراسية</label><select id="grade"><option value="">اختار المرحلة</option><option>المرحلة الإعدادية</option><option>الصف الأول الثانوي</option><option>الصف الثاني الثانوي</option><option>الصف الثالث الثانوي</option><option>البكالوريا المصرية</option></select></div>
+  <button class="auth-submit" id="submitBtn" type="submit">دخول</button>
+ </form>
+ <div id="authMessage" class="auth-message hidden" role="status"></div>
+ <p class="auth-note">استخدم بريدًا إلكترونيًا يمكنك الوصول إليه. لو فعّلت تأكيد البريد في Supabase، ستحتاج لفتح رسالة التأكيد قبل تسجيل الدخول.</p>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script>
+</body></html>
