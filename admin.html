@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fffdf8">
+<title>لوحة إدارة مستر مينا دياب</title>
+<style>
+:root{--ink:#20201e;--muted:#77746d;--gold:#b58a3a;--line:#e8e2d7;--paper:#fffdf8;--white:#fff;--danger:#b42318;--green:#18794e}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Tahoma,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:var(--ink);color:white}button.secondary{background:#f2eee6;color:var(--ink);border:1px solid var(--line)}button.gold{background:var(--gold)}button.danger{background:var(--danger)}input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}label{display:block;font-size:13px;margin:12px 0 6px;font-weight:700}.muted{color:var(--muted);font-size:13px}.hidden{display:none!important}.wrap{max-width:1180px;margin:auto;padding:22px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:18px}.brand{display:flex;gap:12px;align-items:center}.logo{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--ink);color:#f0d59b;font-weight:900;font-size:22px}.brand h1{font-size:19px;margin:0 0 4px}.brand p{margin:0;color:var(--muted);font-size:12px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:20px;box-shadow:0 8px 28px #33250b08}.login{max-width:460px;margin:8vh auto}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.tabs button.active{background:var(--gold)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.stat{background:#faf7f0;border:1px solid var(--line);border-radius:14px;padding:16px}.stat b{font-size:25px;display:block;margin-top:6px}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:right;border-bottom:1px solid var(--line);padding:12px 8px;font-size:13px;vertical-align:top}th{color:var(--muted)}.table-wrap{overflow:auto}.actions{display:flex;gap:7px;flex-wrap:wrap}.status{padding:11px;border-radius:10px;background:#f2eee6;margin-top:12px;font-size:13px;white-space:pre-wrap}.status.error{background:#fff0ef;color:var(--danger)}.status.ok{background:#edf9f1;color:var(--green)}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.section-head h2{margin:0;font-size:19px}.notice{border-right:4px solid var(--gold);padding:12px 14px;background:#faf7f0;line-height:1.8;font-size:13px;margin-top:16px}@media(max-width:700px){.wrap{padding:14px}.grid,.stats{grid-template-columns:1fr}.panel{padding:16px}.top{align-items:flex-start}th,td{min-width:120px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div class="brand"><div class="logo">M²</div><div><h1>لوحة إدارة مستر مينا دياب</h1><p>الإبداع في الرياضيات · إدارة المحتوى والطلاب</p></div></div>
+ <button id="logoutBtn" class="secondary hidden">تسجيل الخروج</button>
+</header>
+<section id="loginPanel" class="panel login">
+ <h2>دخول الإدارة</h2><p class="muted">الدخول مخصص لحساب تم منحه صلاحية admin داخل Supabase.</p>
+ <form id="loginForm">
+  <label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" required>
+  <label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password" required>
+  <div class="form-actions"><button class="gold" type="submit">دخول آمن</button></div>
+ </form>
+ <div id="loginStatus" class="status hidden" role="status"></div>
+ <div class="notice">لا يوجد حساب إداري افتراضي ولا كلمة مرور ثابتة في الصفحة. أنشئ حساب الإدارة من Supabase ثم امنحه role = admin من SQL Editor بعد التأكد من هويته.</div>
+</section>
+<section id="dashboard" class="hidden">
+ <div class="stats">
+  <div class="stat"><span class="muted">عدد الطلاب</span><b id="studentCount">—</b></div>
+  <div class="stat"><span class="muted">عدد الكورسات</span><b id="courseCount">—</b></div>
+  <div class="stat"><span class="muted">الكورسات المنشورة</span><b id="publishedCount">—</b></div>
+ </div>
+ <nav class="tabs" aria-label="أقسام الإدارة">
+  <button class="active" data-tab="courses">الكورسات</button><button class="secondary" data-tab="students">الطلاب</button><button class="secondary" data-tab="homepage">الرئيسية</button>
+ </nav>
+ <section id="coursesTab" class="panel">
+  <div class="section-head"><h2>إدارة الكورسات</h2><button id="newCourseBtn" class="gold">＋ كورس جديد</button></div>
+  <form id="courseForm" class="hidden">
+   <input id="courseId" type="hidden">
+   <div class="grid"><div><label for="courseTitle">اسم الكورس</label><input id="courseTitle" maxlength="160" required></div><div><label for="courseGrade">المرحلة / الصف</label><input id="courseGrade" maxlength="100" placeholder="مثال: الصف الأول الثانوي"></div></div>
+   <label for="courseDescription">وصف الكورس</label><textarea id="courseDescription" rows="3" maxlength="2000"></textarea>
+   <label for="courseCover">رابط صورة الغلاف (اختياري)</label><input id="courseCover" type="url" placeholder="https://...">
+   <label><input id="coursePublished" type="checkbox" style="width:auto"> نشر الكورس للطلاب</label>
+   <div class="form-actions"><button class="gold" type="submit">حفظ الكورس</button><button id="cancelCourseBtn" class="secondary" type="button">إلغاء</button></div>
+  </form>
+  <div id="coursesStatus" class="status hidden"></div><div class="table-wrap"><table><thead><tr><th>الكورس</th><th>المرحلة</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="coursesRows"></tbody></table></div>
+ </section>
+ <section id="studentsTab" class="panel hidden">
+  <div class="section-head"><h2>بيانات الطلاب</h2><button id="refreshStudents" class="secondary">تحديث</button></div>
+  <p class="muted">تظهر بيانات الطلاب الموجودة في جدول profiles وفق صلاحيات قاعدة البيانات.</p>
+  <div id="studentsStatus" class="status hidden"></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>رقم الهاتف</th><th>المرحلة</th><th>تاريخ التسجيل</th></tr></thead><tbody id="studentsRows"></tbody></table></div>
+ </section>
+ <section id="homepageTab" class="panel hidden">
+  <h2>إعدادات الصفحة الرئيسية</h2><p class="muted">يتم حفظ العنوان في جدول site_settings. يلزم إضافة كود صغير إلى index.html لعرضه تلقائيًا؛ حفظه وحده لا يغيّر HTML المنشور.</p>
+  <form id="homepageForm"><label for="heroTitle">العنوان الرئيسي</label><input id="heroTitle" maxlength="180" required><label for="heroSubtitle">الوصف</label><textarea id="heroSubtitle" rows="3" maxlength="1000"></textarea><div class="form-actions"><button class="gold" type="submit">حفظ إعدادات الرئيسية</button><button class="secondary" id="reloadSettings" type="button">إعادة تحميل</button></div></form>
+  <div id="homepageStatus" class="status hidden"></div>
+ </section>
+ <div id="globalStatus" class="status hidden" role="status"></div>
+</section>
+<footer class="muted" style="text-align:center;padding:26px 0">© Mr. Mina Diab · لوحة الإدارة محمية بصلاحيات Supabase RLS</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
