@@ -1,20 +1,11 @@
--- نفّذ هذا الجزء بعد مراجعة السياسات الحالية في Supabase.
--- لا يحذف السياسات القديمة؛ ينشئ السياسات المطلوبة إن لم تكن موجودة.
+-- Review existing RLS policies before running. Do not disable RLS.
 alter table public.profiles enable row level security;
-grant select, insert, update on public.profiles to authenticated;
-
-drop policy if exists "Student can read own profile" on public.profiles;
-create policy "Student can read own profile" on public.profiles
-for select to authenticated using ((select auth.uid()) = id);
-
-drop policy if exists "Student can insert own profile" on public.profiles;
-create policy "Student can insert own profile" on public.profiles
-for insert to authenticated with check ((select auth.uid()) = id and role = 'student');
-
-drop policy if exists "Student can update own profile" on public.profiles;
-create policy "Student can update own profile" on public.profiles
-for update to authenticated using ((select auth.uid()) = id)
-with check ((select auth.uid()) = id and role = 'student');
-
--- لا تضف سياسة عامة تسمح للطلاب بقراءة كل profiles.
--- صلاحية admin تُمنح يدويًا من SQL Editor بعد التحقق من UUID.
+-- Students can read their own profile.
+drop policy if exists "Students can read own profile" on public.profiles;
+create policy "Students can read own profile" on public.profiles for select to authenticated using (id = auth.uid());
+-- Students can create/update only their own student profile. Admin access should remain governed by existing admin policies.
+drop policy if exists "Students can insert own student profile" on public.profiles;
+create policy "Students can insert own student profile" on public.profiles for insert to authenticated with check (id = auth.uid() and role = 'student');
+drop policy if exists "Students can update own student profile" on public.profiles;
+create policy "Students can update own student profile" on public.profiles for update to authenticated using (id = auth.uid()) with check (id = auth.uid() and role = 'student');
+-- NOTE: PostgreSQL permissive policies are OR-combined. Review other existing policies so they do not allow users to change their own role.
