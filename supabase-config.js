@@ -1,2 +1,5 @@
-// ضع رابط مشروع Supabase والمفتاح العام anon فقط. لا تضع service_role هنا.
-window.SUPABASE_CONFIG = { url: "https://YOUR_PROJECT_ID.supabase.co", anonKey: "YOUR_SUPABASE_ANON_PUBLIC_KEY" };
+// Public browser configuration. Never put Supabase service_role/secret keys here.
+window.SUPABASE_CONFIG = {
+  url: "https://ffvnpheaicoojqnmffbp.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmdm5waGVhaWNvb2pxbm1mZmJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNzQyMDQsImV4cCI6MjEwNzY1MDIwMn0.yoB7ws80C5vLTaP6mGkV0eguP-PQcmBI7FNS3vLYB9Y"
+};
