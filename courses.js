@@ -1,11 +1,1 @@
-(() => {
- const host=document.getElementById("publicCourses");
- const cfg=window.SUPABASE_CONFIG;
- if(!host||!window.supabase||!cfg||!cfg.url||!cfg.anonKey||cfg.url.includes("YOUR_PROJECT_ID")) return;
- const client=window.supabase.createClient(cfg.url,cfg.anonKey);
- const esc=(v)=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
- client.from("courses").select("id,title,description,grade,cover_url").eq("published",true).order("created_at",{ascending:false}).then(({data,error})=>{
-   if(error||!data?.length)return;
-   host.innerHTML=data.map(c=>`<article class="public-course-card">${c.cover_url?`<img class="course-cover" src="${esc(c.cover_url)}" alt="">`:"<span class='course-symbol'>∑</span>"}${c.grade?`<span class="course-grade">${esc(c.grade)}</span>`:""}<h3>${esc(c.title)}</h3><p>${esc(c.description||"كورس تعليمي مع مستر مينا دياب.")}</p><a class="course-action" href="contact.html">استفسر عن الكورس ↙</a></article>`).join("");
- });
-})();
+document.addEventListener('DOMContentLoaded',async()=>{const root=document.getElementById('publicCourses');if(!root||!window.supabase||!window.SUPABASE_CONFIG)return;try{const sb=window.supabase.createClient(window.SUPABASE_CONFIG.url,window.SUPABASE_CONFIG.anonKey);const {data,error}=await sb.from('courses').select('id,title,description,grade,thumbnail_url').eq('is_published',true).order('created_at',{ascending:false});if(error||!data||!data.length)return;root.innerHTML='';data.forEach(c=>{const card=document.createElement('article');card.className='public-course-card';const symbol=document.createElement('span');symbol.className='course-symbol';symbol.textContent='∑';const h=document.createElement('h3');h.textContent=c.title||'كورس رياضيات';const p=document.createElement('p');p.textContent=c.description||c.grade||'محتوى تعليمي للمرحلة الدراسية';card.append(symbol,h,p);root.append(card)})}catch(e){console.warn('Courses not loaded',e)}});

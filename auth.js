@@ -1,48 +1,13 @@
-(() => {
- const $=id=>document.getElementById(id), cfg=window.SUPABASE_CONFIG;
- let mode="login";
- const msg=(text,type="")=>{const el=$("authMessage");el.textContent=text;el.className="auth-message"+(type?" "+type);};
- if(!window.supabase||!cfg||!cfg.url||!cfg.anonKey||cfg.url.includes("YOUR_PROJECT_ID")||cfg.anonKey.includes("YOUR_SUPABASE")){
-   msg("قبل الاستخدام، ضع Project URL و anon/public key في ملف supabase-config.js.","error");return;
- }
- const sb=window.supabase.createClient(cfg.url,cfg.anonKey);
- function setMode(next){
-  mode=next;const signup=next==="signup";
-  $("loginMode").classList.toggle("active",!signup);$("signupMode").classList.toggle("active",signup);
-  $("nameGroup").classList.toggle("hidden",!signup);$("gradeGroup").classList.toggle("hidden",!signup);
-  $("fullName").required=signup;$("formTitle").textContent=signup?"إنشاء حساب طالب":"تسجيل الدخول";
-  $("submitBtn").textContent=signup?"إنشاء الحساب":"دخول";$("password").autocomplete=signup?"new-password":"current-password";
-  $("authMessage").classList.add("hidden");
- }
- $("loginMode").addEventListener("click",()=>setMode("login"));
- $("signupMode").addEventListener("click",()=>setMode("signup"));
- $("authForm").addEventListener("submit",async ev=>{
-  ev.preventDefault();$("submitBtn").disabled=true;$("submitBtn").textContent="جارٍ التنفيذ...";
-  try{
-   const email=$("email").value.trim().toLowerCase(),password=$("password").value;
-   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("اكتب بريدًا إلكترونيًا صحيحًا.");
-   if(password.length<8) throw new Error("كلمة المرور لازم تكون 8 أحرف أو أرقام على الأقل.");
-   if(mode==="signup"){
-    const full_name=$("fullName").value.trim(),grade=$("grade").value||null;
-    if(full_name.length<3) throw new Error("اكتب اسم الطالب بالكامل.");
-    const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name,grade}}});
-    if(error) throw error;
-    if(!data.user) throw new Error("لم يتم إنشاء الحساب. حاول مرة أخرى.");
-    if(!data.session){
-      msg("تم إنشاء طلب الحساب. افتح بريدك الإلكتروني واضغط رابط التأكيد إذا كان تأكيد البريد مفعّلًا في Supabase، ثم سجّل الدخول.","success");
-      return;
-    }
-    const {error:profileError}=await sb.from("profiles").upsert({id:data.user.id,full_name,phone:null,grade,role:"student"},{onConflict:"id"});
-    if(profileError) throw new Error("الحساب اتعمل، لكن حفظ بيانات الملف الشخصي فشل: "+profileError.message+". راجع سياسة profiles.");
-    msg("تم إنشاء حسابك بنجاح.","success");$("password").value="";
-   }else{
-    const {data,error}=await sb.auth.signInWithPassword({email,password});
-    if(error) throw error;
-    msg("تم تسجيل الدخول بنجاح. أهلاً بك!","success");
-    setTimeout(()=>{location.href="index.html";},900);
-   }
-  }catch(e){msg("حصلت مشكلة: "+(e.message||"خطأ غير معروف"),"error");}
-  finally{$("submitBtn").disabled=false;$("submitBtn").textContent=mode==="signup"?"إنشاء الحساب":"دخول";}
- });
- sb.auth.getSession().then(({data})=>{if(data.session)msg("أنت مسجّل الدخول بالفعل. يمكنك العودة للموقع.","success");});
+(()=>{
+const $=id=>document.getElementById(id);let mode='login';const msg=(t,type='info')=>{const e=$('authMessage');e.textContent=t;e.className='auth-message '+type;};const clearErrors=()=>document.querySelectorAll('.field-error').forEach(e=>e.textContent='');
+const cfg=window.SUPABASE_CONFIG;if(!window.supabase||!cfg||!cfg.url||!cfg.anonKey||cfg.url.includes('YOUR_PROJECT')||cfg.anonKey.includes('YOUR_')){msg('إعدادات الاتصال بقاعدة البيانات غير مكتملة. راجع ملف supabase-config.js.','error');return}
+const sb=window.supabase.createClient(cfg.url,cfg.anonKey);const emailEl=$('email'),passEl=$('password');
+function setMode(next){mode=next;const signup=mode==='signup';$('loginMode').classList.toggle('active',!signup);$('signupMode').classList.toggle('active',signup);$('loginMode').setAttribute('aria-selected',String(!signup));$('signupMode').setAttribute('aria-selected',String(signup));$('nameGroup').classList.toggle('hidden',!signup);$('gradeGroup').classList.toggle('hidden',!signup);$('confirmGroup').classList.toggle('hidden',!signup);$('termsRow').classList.toggle('hidden',!signup);$('fullName').required=signup;$('confirmPassword').required=signup;$('grade').required=signup;$('terms').required=signup;$('formTitle').textContent=signup?'أنشئ حسابك ✨':'أهلًا بعودتك 👋';$('formSubtitle').textContent=signup?'بيانات بسيطة ونبدأ رحلتك التعليمية.':'سجّل دخولك وكمل رحلتك التعليمية.';$('submitText').textContent=signup?'إنشاء الحساب':'تسجيل الدخول';passEl.autocomplete=signup?'new-password':'current-password';$('forgotPassword').classList.toggle('hidden',signup);$('authMessage').className='auth-message hidden';clearErrors();}
+$('loginMode').addEventListener('click',()=>setMode('login'));$('signupMode').addEventListener('click',()=>setMode('signup'));const params=new URLSearchParams(location.search);setMode(params.get('mode')==='signup'?'signup':'login');
+$('togglePassword').addEventListener('click',()=>{passEl.type=passEl.type==='password'?'text':'password';$('togglePassword').setAttribute('aria-label',passEl.type==='password'?'إظهار كلمة المرور':'إخفاء كلمة المرور')});
+function readable(err){const m=(err&&err.message)||'حصل خطأ غير متوقع.';if(/Invalid API key/i.test(m))return 'مفتاح Supabase غير مقبول. راجع المفتاح العام داخل supabase-config.js.';if(/Invalid login credentials/i.test(m))return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';if(/Email not confirmed/i.test(m))return 'لازم تأكد بريدك من رسالة Supabase قبل تسجيل الدخول.';if(/User already registered/i.test(m))return 'البريد ده مسجّل بالفعل. اختار تسجيل الدخول بدل إنشاء حساب جديد.';if(/Password should be at least/i.test(m))return 'كلمة المرور قصيرة؛ استخدم 8 أحرف على الأقل.';if(/rate limit/i.test(m))return 'محاولات كتير في وقت قصير. استنى شوية وجرب تاني.';if(/Failed to fetch/i.test(m))return 'تعذر الاتصال بالخدمة. تأكد من الإنترنت ورابط Supabase.';return m}
+function valid(){clearErrors();let ok=true;const email=emailEl.value.trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){$('emailError').textContent='اكتب بريد إلكتروني صحيح.';ok=false}if(passEl.value.length<8){$('passwordError').textContent='كلمة المرور لازم تكون 8 أحرف على الأقل.';ok=false}if(mode==='signup'){if($('fullName').value.trim().length<3){$('nameError').textContent='اكتب اسمك بالكامل.';ok=false}if(passEl.value!==$('confirmPassword').value){$('confirmError').textContent='كلمتا المرور مش متطابقتين.';ok=false}if(!$('grade').value){msg('اختار المرحلة الدراسية علشان نكمل.','error');ok=false}if(!$('terms').checked){msg('لازم توافق على استخدام البيانات لإنشاء الحساب.','error');ok=false}}return ok}
+$('authForm').addEventListener('submit',async e=>{e.preventDefault();if(!valid())return;const btn=$('submitBtn');btn.disabled=true;$('submitText').textContent=mode==='signup'?'جارٍ إنشاء الحساب...':'جارٍ تسجيل الدخول...';$('authMessage').className='auth-message hidden';try{const email=emailEl.value.trim().toLowerCase(),password=passEl.value;if(mode==='signup'){const full_name=$('fullName').value.trim(),grade=$('grade').value;const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name,grade},emailRedirectTo:location.origin+location.pathname.replace(/login\.html$/,'index.html')}});if(error)throw error;if(!data.user)throw new Error('لم يتم إنشاء الحساب. جرّب مرة أخرى.');if(data.session){const {error:pe}=await sb.from('profiles').upsert({id:data.user.id,full_name,phone:null,grade,role:'student'},{onConflict:'id'});if(pe)msg('الحساب اتعمل، لكن تعذر حفظ الملف الشخصي. تفاصيل: '+readable(pe),'error');else{msg('تم إنشاء حسابك بنجاح! هنرجعك للصفحة الرئيسية.','success');setTimeout(()=>location.href='index.html',1300)}}else{msg('تم إنشاء الحساب. افتح بريدك واضغط رابط التأكيد لو وصلك، وبعدها ارجع وسجّل الدخول.','success');setMode('login')}}else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;const {data:profile,error:pe}=await sb.from('profiles').select('id,full_name,grade,role').eq('id',data.user.id).maybeSingle();if(pe)msg('تم تسجيل الدخول، لكن قراءة ملفك الشخصي تعذرت. راجع سياسات profiles في Supabase.','error');else if(!profile){msg('تم تسجيل الدخول، لكن ملف الطالب غير موجود في profiles. يحتاج إعداد قاعدة البيانات لإكمال الحساب.','error')}else{msg('تم تسجيل الدخول بنجاح. أهلًا بيك!','success');setTimeout(()=>location.href='index.html',900)}}}catch(err){msg(readable(err),'error')}finally{btn.disabled=false;$('submitText').textContent=mode==='signup'?'إنشاء الحساب':'تسجيل الدخول'}});
+$('forgotPassword').addEventListener('click',async()=>{const email=emailEl.value.trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg('اكتب بريدك الإلكتروني الأول، وبعدها اضغط نسيت كلمة المرور.','error');emailEl.focus();return}try{const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)throw error;msg('لو البريد مسجّل، هتوصلك رسالة فيها خطوات إعادة تعيين كلمة المرور.','success')}catch(e){msg(readable(e),'error')}});
+const year=$('year');if(year)year.textContent=new Date().getFullYear();sb.auth.getSession().then(({data})=>{if(data.session&&new URLSearchParams(location.search).get('mode')!=='signup'){msg('أنت مسجّل الدخول بالفعل. يمكنك العودة للصفحة الرئيسية.','info')}});
 })();
